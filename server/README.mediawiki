@@ -1,0 +1,18 @@
+===using curl to access rest.api===
+curl http://localhost:3020/users
+
+curl http://localhost:3020/lists
+
+curl http://localhost:3020/users/5316023647c5a1f01716da94
+
+curl -d '{"MyKey":"My Value"}' -H "Content-Type: application/json" http://localhost:3020/users
+
+curl -d '{"name":"tim3", "email":"tim@sitebuilt.net"}' -H "Content-Type: application/json" http://localhost:3020/users
+
+curl -X PUT http://localhost:3020/users/tim/slldsl4l5l6jkgkltl554
+
+curl -d '{"name":"tim3", "email":"tim@sitebuilt.net", "lists":[]}' -H "Content-Type: application/json" http://localhost:3020/users
+
+===git commits===
+
+;init: basic rest get functionality plus some put and post with curl 
