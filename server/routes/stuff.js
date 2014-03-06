@@ -20,6 +20,7 @@ mongoClient.open(function(err, mongoClient) {
 });
 
 exports.findById = function(req, res) {
+    console.log('in find by id');
     console.log(req.params);
     var id = req.params.id;
     var list = req.params.list;
@@ -34,6 +35,7 @@ exports.findById = function(req, res) {
 };
 
 exports.findByName = function(req, res) {
+    console.log('in find by name');
     console.log(req.params);
     var name = req.params.name;
     db.collection('users', function(err, collection) {
@@ -67,12 +69,32 @@ exports.createUser = function(req, res){
     });      
 };
 
+exports.getUsersLists = function (req, res) {//lists/:name
+    console.log('in getUsersLists');
+    var name =req.params.name;
+    console.log(name);
+    db.collection('users', function(err, collection) {
+        collection.find({name:name},{lists:1}).toArray(function(err, items) {
+            //console.log(items);
+            res.jsonp(items);
+        });
+    });   
+};
+
 exports.addList2user = function(req, res){
+    console.log('in addList2user');
     var name =req.params.name; 
     var lid =req.params.lid;
-    db.collection('users', function(err, collection) {
-        collection.update({name:name},{$push:{lists:lid}}, {upsert:false}, function(err, saved) {
-            res.jsonp(saved);
+    var ObjectId = require('mongoose').Types.ObjectId;
+    db.collection('lists', function(err, collection) {
+        collection.findOne({_id:ObjectId(lid)}, function(err, items) {
+            userlist=(items);
+            db.collection('users', function(err, collection) {
+                collection.update({name:name},{$push:{lists:userlist}}, {upsert:false}, function(err, saved) {
+                    res.jsonp(saved);
+                });
+            });
+            res.jsonp('saved');
         });
     });
 };

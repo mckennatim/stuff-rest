@@ -9,6 +9,9 @@ curl -d '{"MyKey":"My Value"}' -H "Content-Type: application/json" http://localh
 
 curl -d '{"name":"tim3", "email":"tim@sitebuilt.net"}' -H "Content-Type: application/json" http://localhost:3020/users
 
+curl -X PUT http://localhost:3020/users/tim/5315545dafcb3c583086f86d
+curl -X PUT http://localhost:3020/users/tim/5315545dafcb3c583086f868
+curl -X PUT http://localhost:3020/users/tim/5315545dafcb3c583086f869
 curl -X PUT http://localhost:3020/users/tim/slldsl4l5l6jkgkltl554
 
 curl -d '{"name":"tim3", "email":"tim@sitebuilt.net", "lists":[]}' -H "Content-Type: application/json" http://localhost:3020/users
