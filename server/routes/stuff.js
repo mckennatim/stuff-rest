@@ -17,6 +17,12 @@ mongoClient.open(function(err, mongoClient) {
             populateDB(users);
         }
     });
+    db.collection('items', {strict:true}, function(err, collection) {
+        if (err) {
+            console.log("The 'items' collection doesn't exist. Creating it with sample data...");
+            populateDB(items);
+        }
+    });    
 });
 
 exports.findById = function(req, res) {
@@ -46,17 +52,30 @@ exports.findByName = function(req, res) {
     });
 };
 
-exports.find = function(req, res) {
-    console.log(req.params);
-    var name = req.params.name;
-    console.log(typeof name);    
-    db.collection(name, function(err, collection) {
+var find =function(na, res){
+    db.collection(na, function(err, collection) {
         collection.find().toArray(function(err, items) {
             console.log(items);
             res.jsonp(items);
         });
     });
 };
+
+exports.findLists = function(req, res) {
+    console.log('in findLists');
+    find('lists', res);
+};
+
+exports.findUsers = function(req, res) {
+    console.log('in findUsers');
+    find('users', res);
+};
+
+exports.findItems = function(req, res) {
+    console.log('in findItem');
+    find('items', res);
+};
+
 
 exports.createUser = function(req, res){
     //res.cookie('name', 'tobi', { domain: 'localhost', path: '/framewks/rest', secure: true });
@@ -99,6 +118,28 @@ exports.addList2user = function(req, res){
     });
 };
 
+exports.getListItems4user = function(req, res){
+    console.log('in getListItems4user');
+    var user =req.params.user; 
+    var list =req.params.list;
+    db.collection('users', function(err, collection) {
+        collection.findOne({name:user}, function(err, auser) {
+            var userlists=auser.lists;
+            obj = _un.find(userlists, function(obj) { return obj.name == 'groceries'});
+            console.log(obj._id);
+            /*
+            db.collection('items', function(err, collection) {
+                collection.find({name:name},{lists:1}).toArray(function(err, items) {
+            
+                    res.jsonp(saved);
+                });
+            });
+*/
+            res.jsonp(obj._id);
+        });
+    });
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Populate database with sample data -- Only used once: the first time the application is started.
 // You'd typically not find this code in a real-life app, since the database would already exist.
@@ -112,20 +153,21 @@ var populateDB = function(huh) {
     });
 };
 
+
 var items =[];
 items.name = 'items';
-items.items = [
-{lid:'26',item:'banana', done:false},
-{lid:'26',item:'coffee', done:false},
-{lid:'26',item:'brown sugar', done:false},
-{lid:'26',item:'bacon', done:false},
-{lid:'26',item:'apples', done:false},
-{lid:'26',item:'brown gravy', done:true},
-{lid:'26',item:'bags', done:true},
-{lid:'26',item:'applesauce', done:true},
-{lid:'26',item:'sugar', done:true},
-{lid:'26',item:'baby back ribs', done:true},
-{lid:'26',item:'apple butter', done:true}
+items.items = [   
+{lid:'5315545dafcb3c583086f86d',item:'banana', done:false},
+{lid:'lid5315545dafcb3c583086f86d',item:'coffee', done:false},
+{lid:'lid5315545dafcb3c583086f86d',item:'brown sugar', done:false},
+{lid:'lid5315545dafcb3c583086f86d',item:'bacon', done:false},
+{lid:'lid5315545dafcb3c583086f86d',item:'apples', done:false},
+{lid:'lid5315545dafcb3c583086f86d',item:'brown gravy', done:true},
+{lid:'lid5315545dafcb3c583086f86d',item:'bags', done:true},
+{lid:'lid5315545dafcb3c583086f86d',item:'applesauce', done:true},
+{lid:'lid5315545dafcb3c583086f86d',item:'sugar', done:true},
+{lid:'lid5315545dafcb3c583086f86d',item:'baby back ribs', done:true},
+{lid:'lid5315545dafcb3c583086f86d',item:'apple butter', done:true}
 ];
 
 var lists =[];
