@@ -1,14 +1,4 @@
-var express = require('express'),
-    path = require('path'),
-    stuff = require('./routes/stuff'),
-    mongoose = require('mongoose');
-    _un = require('underscore');
-
-
-
-var app = express();
-app.use(express.bodyParser());
-app.use(express.static(path.join(__dirname, '../client')));
-
-app.listen(3020);
-console.log('Listening on port 3020...');
+var app = require('./app.js')
+var config = require('./config/changeDb')
+config.change2db('./config/', 'stuffDb')
+app.listen(3000)

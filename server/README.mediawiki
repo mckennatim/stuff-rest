@@ -80,3 +80,6 @@ var users=
 ===git commits===
 
 ;init: basic rest get functionality plus some put and post with curl 
+
+http://stackoverflow.com/questions/9517880/how-does-one-unit-test-routes-with-express
+

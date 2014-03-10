@@ -1,31 +1,44 @@
-var MongoClient = require('mongodb').MongoClient,
-    Server = require('mongodb').Server,
-    db;
-
-var mongoClient = new MongoClient(new Server('localhost', 27017));
-mongoClient.open(function(err, mongoClient) {
-    db = mongoClient.db("stuffDb");
-    db.collection('lists', {strict:true}, function(err, collection) {
-        if (err) {
-            console.log("The 'lists' collection doesn't exist. Creating it with sample data...");
-            populateDB(lists);
-        }
-    });
-    db.collection('users', {strict:true}, function(err, collection) {
-        if (err) {
-            console.log("The 'users' collection doesn't exist. Creating it with sample data...");
-            populateDB(users);
-        }
-    });
-    db.collection('items', {strict:true}, function(err, collection) {
-        if (err) {
-            console.log("The 'items' collection doesn't exist. Creating it with sample data...");
-            populateDB(items);
-        }
-    });    
+var db = require('../config/dbConfig')
+db.collection('lists', {strict:true}, function(err, collection) {
+    if (err) {
+        console.log("The 'lists' collection doesn't exist. Creating it with sample data...");
+        populateDB(lists);
+    }
 });
+db.collection('users', {strict:true}, function(err, collection) {
+    if (err) {
+        console.log("The 'users' collection doesn't exist. Creating it with sample data...");
+        populateDB(users);
+    }
+});
+db.collection('items', {strict:true}, function(err, collection) {
+    if (err) {
+        console.log("The 'items' collection doesn't exist. Creating it with sample data...");
+        populateDB(items);
+    }
+});    
 
+var find =function(na, res){
+    db.collection(na, function(err, collection) {
+        collection.find().toArray(function(err, items) {
+            console.log(items);
+            res.jsonp(items);
+        });
+    });
+};
 
+exports.findLists = function(req, res) {
+    console.log('in findLists');
+    find('lists', res);
+};
+exports.findUsers = function(req, res) {
+    console.log('in findLists');
+    find('users', res);
+};
+exports.findItems = function(req, res) {
+    console.log('in findLists');
+    find('items', res);
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Populate database with sample data -- Only used once: the first time the application is started.
