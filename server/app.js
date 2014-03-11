@@ -14,7 +14,7 @@ exports.close = function (callback) {
 };
 
 this.server.get('/', function(req, res) {
-  res.send('please select a collection, e.g., /collections/messages')
+  res.send('please select a collection, lists, users or items')
 });
 
 this.server.get('/lists', stuff.findLists);

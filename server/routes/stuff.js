@@ -1,22 +1,35 @@
-var db = require('../config/dbConfig')
-db.collection('lists', {strict:true}, function(err, collection) {
-    if (err) {
-        console.log("The 'lists' collection doesn't exist. Creating it with sample data...");
-        populateDB(lists);
-    }
-});
-db.collection('users', {strict:true}, function(err, collection) {
-    if (err) {
-        console.log("The 'users' collection doesn't exist. Creating it with sample data...");
-        populateDB(users);
-    }
-});
-db.collection('items', {strict:true}, function(err, collection) {
-    if (err) {
-        console.log("The 'items' collection doesn't exist. Creating it with sample data...");
-        populateDB(items);
-    }
-});    
+console.log("in stuff")
+var MongoClient = require('mongodb').MongoClient,
+    Server = require('mongodb').Server,
+    db;
+
+var mongoClient = new MongoClient(new Server('localhost', 27017));
+mongoClient.open(function(err, mongoClient) {
+    db = mongoClient.db("stuffTest");
+    //var mongoskin = require('mongoskin')
+    //var db = mongoskin.db('mongodb://localhost:27017/stuffTest', {safe:true})
+    //var db = require('../config/dbConfig')
+    //console.log(db)
+    db.collection('users', {strict:true}, function(err, collection) {
+        if (err) {
+            console.log("The 'users' collection doesn't exist. Creating it with sample data...");
+            populateDB(users);
+        }
+    });
+    //console.log(db)
+    db.collection('lists', {strict:true}, function(err, collection) {
+        if (err) {
+            console.log("The 'lists' collection doesn't exist. Creating it with sample data...");
+            populateDB(lists);
+        }
+    });
+    db.collection('items', {strict:true}, function(err, collection) {
+        if (err) {
+            console.log("The 'items' collection doesn't exist. Creating it with sample data...");
+            populateDB(items);
+        }
+    });   
+}); 
 
 var find =function(na, res){
     db.collection(na, function(err, collection) {
@@ -87,5 +100,6 @@ var users = [];
 users.name = 'users';
 users.items= [
 {name: 'tim', email: 'mckenna.tim@gmail.com', lists:[]},
+{name: 'peri', email: 'perimckenna@gmail.com', lists:[]},
 {name: 'tim2', email: 'mckt_jp@yahoo.com', lists:[]}
 ];
