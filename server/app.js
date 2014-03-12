@@ -20,4 +20,5 @@ this.server.get('/', function(req, res) {
 this.server.get('/lists', stuff.findLists);
 this.server.get('/users', stuff.findUsers);
 this.server.get('/items', stuff.findItems);
+this.server.post('/users', stuff.createUser);
 

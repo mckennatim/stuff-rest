@@ -34,7 +34,7 @@ mongoClient.open(function(err, mongoClient) {
 var find =function(na, res){
     db.collection(na, function(err, collection) {
         collection.find().toArray(function(err, items) {
-            console.log(items);
+            //console.log(items);
             res.jsonp(items);
         });
     });
@@ -51,6 +51,16 @@ exports.findUsers = function(req, res) {
 exports.findItems = function(req, res) {
     console.log('in findLists');
     find('items', res);
+};
+exports.createUser = function(req, res){
+    //res.cookie('name', 'tobi', { domain: 'localhost', path: '/framewks/rest', secure: true });
+    var body= req.body; 
+    db.collection('users', function(err, collection) {
+        collection.insert(body, function(err, saved) {
+            console.log(saved);
+            res.jsonp(saved);
+        });
+    });      
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

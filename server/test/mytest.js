@@ -1,10 +1,13 @@
-var assert = require('assert'),
-    http = require('http');
+var assert = require('assert')
+, request = require('supertest')
+, should = require('should')
+, http = require('http');
 
 var app = require('../app.js');
 
 
 describe('basic server tests', function () {
+  var url = 'http://localhost:3020';
   before(function(){
     //var config = require('../config/change2db');
     //config.change2db('../config/', 'stuffTest');
@@ -36,7 +39,21 @@ describe('basic server tests', function () {
       done();
     });
   })
-
+/*
+  it('creates user by POST to /user', function(done){
+    data ='{"name":"tim3", "email":"tim@sitebuilt.net"}';
+    request(url)
+      .post('/users')
+      .send(data)
+        // end handles the response
+      .end(function(err, res) {
+        if (err) {console.log('error');};
+        // this is should.js syntax, very clear
+        res.should.have.status(200);
+        done();
+      });
+  })
+*/
   after(function(){
     //app.close();
   });
