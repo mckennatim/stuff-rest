@@ -1,19 +1,28 @@
     var assert = require('assert');
     var mongoskin = require('mongoskin');
-    var db = mongoskin.db('mongodb://localhost:27017/stuffTest', {safe:true});
+    var db = mongoskin.db('mongodb://localhost:27017/stuffDb', {safe:true});
+
 
     result = [];
 
     describe('basic database tests', function(){
-      it('should have 3 users', function(done){
+      before(function(done){
+        db.collection('users', function(err, collection) {
+          collection.ensureIndex({name:1},{unique:true}, function(err, saved) {
+              console.log(err);
+              done();
+          });
+        }); 
+      });
+      it('should have 4 users', function(done){
         db.collection('users').find().toArray(function  (err,result){
           console.log(result.length);
-          assert.equal(result.length,3);
+          assert.equal(result.length,4);
           done();
         });
       });
       it('should be able to insert new user', function(done){
-        body={"name":"tim3", "email":"tim@sitebuilt.net", "lists":[]};
+        body={"name":"tim4", "email":"tim@sitebuilt.net", "lists":[]};
         db.collection('users', function(err, collection) {
           collection.insert(body, function(err, saved) {
               //console.log(saved);
@@ -22,15 +31,13 @@
           });
         });       
       });
-      /*
-      it('detects if new user already exists and says so', function(done{
-        body={"name":"tim3", "email":"tim@sitebuilt.net", "lists":[]};
+      it('should reject a duplicate user', function(done){
+        body={"name":"tim4", "email":"tim@sitebuilt.net", "lists":[]};
         db.collection('users', function(err, collection) {
-          collection.insert(body, function(err, first) {
-
-            });
+          collection.insert(body, function(err, saved) {
+              console.log(err.code);
+              assert.equal(err.code,11000);
+              done();
           });
-        }); 
-      }));
-    */
-    });
+        });       
+      });    });

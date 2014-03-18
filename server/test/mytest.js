@@ -33,27 +33,30 @@ describe('basic server tests', function () {
     });
   });
 
-  it ('should return 3 users', function(done){
+  it ('should return all the users', function(done){
     http.get('http://localhost:3020/users', function (res) {
       assert.equal(200, res.statusCode);
       done();
     });
   })
-/*
   it('creates user by POST to /user', function(done){
-    data ='{"name":"tim3", "email":"tim@sitebuilt.net"}';
+    var data = {name:"tim3", email:"tim@sitebuilt.net", lists:[]};
     request(url)
       .post('/users')
       .send(data)
         // end handles the response
       .end(function(err, res) {
         if (err) {console.log('error');};
-        // this is should.js syntax, very clear
         res.should.have.status(200);
         done();
       });
   })
-*/
+  it ('should return user data for users/tim', function(done){
+    http.get('http://localhost:3020/users/tim', function (res) {
+      assert.equal(200, res.statusCode);
+      done();
+    });
+  })  
   after(function(){
     //app.close();
   });

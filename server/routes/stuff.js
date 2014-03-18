@@ -1,21 +1,27 @@
 console.log("in stuff")
 var MongoClient = require('mongodb').MongoClient,
-    Server = require('mongodb').Server,
+    Server = require('mongodb').Server,    
     db;
 
 var mongoClient = new MongoClient(new Server('localhost', 27017));
 mongoClient.open(function(err, mongoClient) {
-    db = mongoClient.db("stuffTest");
+    db = mongoClient.db("stuffDb");
     //var mongoskin = require('mongoskin')
     //var db = mongoskin.db('mongodb://localhost:27017/stuffTest', {safe:true})
     //var db = require('../config/dbConfig')
     //console.log(db)
     db.collection('users', {strict:true}, function(err, collection) {
-        if (err) {
-            console.log("The 'users' collection doesn't exist. Creating it with sample data...");
-            populateDB(users);
-        }
-    });
+      if (err) {
+        console.log("The 'users' collection doesn't exist. Creating it with sample data...");
+        populateDB(users);
+        db.collection('users', function(err, collection) {
+          collection.ensureIndex({name:1},{unique:true}, function(err, saved) {
+              console.log(err);
+              done();
+          });
+        });
+      };
+    });  
     //console.log(db)
     db.collection('lists', {strict:true}, function(err, collection) {
         if (err) {
@@ -28,7 +34,7 @@ mongoClient.open(function(err, mongoClient) {
             console.log("The 'items' collection doesn't exist. Creating it with sample data...");
             populateDB(items);
         }
-    });   
+    });  
 }); 
 
 var find =function(na, res){
@@ -57,10 +63,14 @@ exports.createUser = function(req, res){
     var body= req.body; 
     db.collection('users', function(err, collection) {
         collection.insert(body, function(err, saved) {
-            console.log(saved);
+            //console.log(saved);
             res.jsonp(saved);
         });
     });      
+};
+exports.findUser = function(req,res){
+    console.log('in findUser');
+
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
