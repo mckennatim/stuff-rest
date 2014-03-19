@@ -17,7 +17,6 @@ mongoClient.open(function(err, mongoClient) {
         db.collection('users', function(err, collection) {
           collection.ensureIndex({name:1},{unique:true}, function(err, saved) {
               console.log(err);
-              done();
           });
         });
       };
@@ -29,10 +28,10 @@ mongoClient.open(function(err, mongoClient) {
             populateDB(lists);
         }
     });
-    db.collection('items', {strict:true}, function(err, collection) {
+    db.collection('products', {strict:true}, function(err, collection) {
         if (err) {
-            console.log("The 'items' collection doesn't exist. Creating it with sample data...");
-            populateDB(items);
+            console.log("The 'products' collection doesn't exist. Creating it with sample data...");
+            populateDB(products);
         }
     });  
 }); 
@@ -68,9 +67,33 @@ exports.createUser = function(req, res){
         });
     });      
 };
-exports.findUser = function(req,res){
-    console.log('in findUser');
-
+exports.findUserByName = function(req, res) {
+    console.log('in find user by name');
+    console.log(req.params);
+    var name = req.params.name;
+    db.collection('users', function(err, collection) {
+        collection.findOne({name:name},function(err, items) {
+            console.log(items);
+            res.jsonp(items);
+        });
+    });
+};
+exports.addList2user = function(req, res){
+    console.log('in addList2user');
+    var name =req.params.name; 
+    var lid =req.params.lid;
+    //var ObjectId = require('mongoose').Types.ObjectId;
+    db.collection('lists', function(err, collection) {
+        collection.findOne({lid:lid}, function(err, items) {
+            db.collection('users', function(err, collection) {
+                collection.update({name:name},{$push:{lists:items}}, {upsert:false}, function(err, saved) {
+                    res.jsonp(items);
+                    console.log(items);
+                });
+            });
+            //res.jsonp('saved');
+        });
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -87,33 +110,33 @@ var populateDB = function(huh) {
 };
 
 
-var items =[];
-items.name = 'items';
-items.items = [   
-{lid:'1',item:'banana', done:false},
-{lid:'4',item:'coffee', done:false},
-{lid:'4',item:'brown sugar', done:false},
-{lid:'4',item:'bacon', done:false},
-{lid:'1',item:'apples', done:false},
-{lid:'5',item:'2x4-8\'', done:false},
-{lid:'1',item:'brown gravy', done:true},
-{lid:'7',item:'bags', done:true},
-{lid:'7',item:'applesauce', done:true},
-{lid:'4',item:'sugar', done:true},
-{lid:'1',item:'baby back ribs', done:true},
-{lid:'4',item:'apple butter', done:true}
+var products =[];
+products.name = 'products';
+products.items = [   
+{lid:'1',product:'banana', done:false},
+{lid:'4',product:'coffee', done:false},
+{lid:'4',product:'brown sugar', done:false},
+{lid:'4',product:'bacon', done:false},
+{lid:'1',product:'apples', done:false},
+{lid:'5',product:'2x4-8\'', done:false},
+{lid:'1',product:'brown gravy', done:true},
+{lid:'7',product:'bags', done:true},
+{lid:'7',product:'applesauce', done:true},
+{lid:'4',product:'sugar', done:true},
+{lid:'1',product:'baby back ribs', done:true},
+{lid:'4',product:'apple butter', done:true}
 ];
 
 var lists =[];
 lists.name = 'lists';
 lists.items = [
-{lid:1, name:'groceries'},
-{lid:2, name:'hardware'},
-{lid:3, name:'drugs'},
-{lid:4, name:'groceries'},
-{lid:5, name:'building'},
-{lid:6, name:'garden'},
-{lid:7, name:'groceries'}
+{lid:'1', shops:'groceries'},
+{lid:'2', shops:'hardware'},
+{lid:'3', shops:'drugs'},
+{lid:'4', shops:'groceries'},
+{lid:'5', shops:'building'},
+{lid:'6', shops:'garden'},
+{lid:'7', shops:'groceries'}
 ];
 
 var users = [];

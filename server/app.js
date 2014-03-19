@@ -24,5 +24,6 @@ this.server.get('/lists', stuff.findLists);
 this.server.get('/users', stuff.findUsers);
 this.server.get('/items', stuff.findItems);
 this.server.post('/users', stuff.createUser);
-this.server.get('/users/:name', stuff.findUser);
+this.server.get('/users/:name', stuff.findUserByName);
+this.server.put('/users/:name/:lid', stuff.addList2user);
 
