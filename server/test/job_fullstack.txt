@@ -1,0 +1,6 @@
+I have been developing software ranging from C++ for microcontrollers to client side angular.js mobile apps. I know my way up and down open source stacks. I would be a great team member. I am a believer in Agile methodologies and find great productivity increases using test driven development.
+
+
+I started on the web hacking the api of MediaWiki to adapt it for classroom use. From writing PHP scripts that would have quizzes show up on students cell phones to writing mobile apps where more of the intelligence is pushed to the client side, I widened my skills I have been developing in the 'internet of things' space, crafting effiicient code to run in 32K that talks to a rest PHP API that serves up MySQL data to mobile devices that make sense of the state of things with a good user interface that is responsive to any device.   
+
+I have been programming sice the Atari 800. It helped my business make money and my students learn. My wife is a bit tech challenged but she uses my apps every day to shop or turn on the heat in the music room on the way home from work. I want to join this industry full-time and be part of an Agile and effective team.
