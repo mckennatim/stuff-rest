@@ -17,13 +17,14 @@ this.server.use(express.bodyParser());
 //this.server.use(express.static(path.join(__dirname, '../client')));
 
 this.server.get('/', function(req, res) {
-  res.send('please select a collection, lists, users or items')
+  res.jsonp('please select a collection, lists, users or items')
 });
 
 this.server.get('/lists', stuff.findLists);
 this.server.get('/users', stuff.findUsers);
 this.server.get('/items', stuff.findItems);
 this.server.post('/users', stuff.createUser);
+this.server.del('/users/:name', stuff.deleteUser);
 this.server.get('/users/:name', stuff.findUserByName);
 this.server.put('/users/:name/:lid', stuff.addList2user);
 

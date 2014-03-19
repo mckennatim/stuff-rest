@@ -39,8 +39,7 @@ mongoClient.open(function(err, mongoClient) {
 var find =function(na, res){
     db.collection(na, function(err, collection) {
         collection.find().toArray(function(err, items) {
-            //console.log(items);
-            res.jsonp(items);
+            if(err){res.jsonp(err)}else{res.jsonp(items)};
         });
     });
 };
@@ -62,8 +61,16 @@ exports.createUser = function(req, res){
     var body= req.body; 
     db.collection('users', function(err, collection) {
         collection.insert(body, function(err, saved) {
-            //console.log(saved);
-            res.jsonp(saved);
+            if(err){res.jsonp(err)}else{res.jsonp(saved)};
+        });
+    });      
+};exports.deleteUser = function(req, res){
+    console.log('in delete user by name');
+    console.log(req.params);
+    var name = req.params.name;
+    db.collection('users', function(err, collection) {
+        collection.remove({name:name}, function(err, saved) {
+            if(err){res.jsonp(err)}else{res.jsonp(saved)};
         });
     });      
 };
