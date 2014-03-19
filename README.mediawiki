@@ -72,10 +72,7 @@ curl -d '{"name":"tim3", "email":"tim@sitebuilt.net", "lists":[]}' -H "Content-T
   {name: 'tim2', email: 'mckt_jp@yahoo.com', lists:[]}
   ];
 </pre>
-===git commits===
 
-;init: basic rest get functionality plus some put and post with curl 
+====TDD====
+http://wiki.sitebuilt.net/TDD
 
-http://stackoverflow.com/questions/9517880/how-does-one-unit-test-routes-with-express
-
-===angular directives===
