@@ -1,3 +1,20 @@
+===using superagent and mocha for testing===
+
+ superagent:
+   √ GET / should be running and return: please select...
+   users
+     √ GETs all users and counts em
+     √ POSTs a new /user/:tim7 -> full array of objects
+     √ rejects POST of duplicate user/:tim7 ->11000
+     √ GETs all users expecting the count to go up
+     √ DELs users/:name from users->success=1
+     users.lists
+       √ PUTs a new :list on /users/:name/:listId->list
+
+
+ 7 passing (63ms)
+
+
 ===using curl to access rest.api===
 curl http://localhost:3020/users
 
