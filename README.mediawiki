@@ -34,66 +34,44 @@ curl -X PUT http://localhost:3020/users/tim/slldsl4l5l6jkgkltl554
 curl -d '{"name":"tim3", "email":"tim@sitebuilt.net", "lists":[]}' -H "Content-Type: application/json" http://localhost:3020/users
 
 ===test data===
-var items =[];
-items.name = 'items';
-items.items = [   
-{lid:'5315545dafcb3c583086f86d',item:'banana', done:false},
-{lid:'lid5315545dafcb3c583086f86d',item:'coffee', done:false},
-{lid:'lid5315545dafcb3c583086f86d',item:'brown sugar', done:false},
-{lid:'lid5315545dafcb3c583086f86d',item:'bacon', done:false},
-{lid:'lid5315545dafcb3c583086f86d',item:'apples', done:false},
-{lid:'lid5315545dafcb3c583086f86d',item:'brown gravy', done:true},
-{lid:'lid5315545dafcb3c583086f86d',item:'bags', done:true},
-{lid:'lid5315545dafcb3c583086f86d',item:'applesauce', done:true},
-{lid:'lid5315545dafcb3c583086f86d',item:'sugar', done:true},
-{lid:'lid5315545dafcb3c583086f86d',item:'baby back ribs', done:true},
-{lid:'lid5315545dafcb3c583086f86d',item:'apple butter', done:true}
-];
+<pre>
+  var products =[];
+  products.name = 'products';
+  products.items = [   
+  {lid:'1',product:'banana', done:false},
+  {lid:'4',product:'coffee', done:false},
+  {lid:'4',product:'brown sugar', done:false},
+  {lid:'4',product:'bacon', done:false},
+  {lid:'1',product:'apples', done:false},
+  {lid:'5',product:'2x4-8\'', done:false},
+  {lid:'1',product:'brown gravy', done:true},
+  {lid:'7',product:'bags', done:true},
+  {lid:'7',product:'applesauce', done:true},
+  {lid:'4',product:'sugar', done:true},
+  {lid:'1',product:'baby back ribs', done:true},
+  {lid:'4',product:'apple butter', done:true}
+  ];
 
-[ { name: 'groceries', _id: 5315545dafcb3c583086f867 },
-  { name: 'hardware', _id: 5315545dafcb3c583086f868 },
-  { name: 'drugs', _id: 5315545dafcb3c583086f869 },
-  { name: 'groceries', _id: 5315545dafcb3c583086f86a },
-  { name: 'building', _id: 5315545dafcb3c583086f86b },
-  { name: 'garden', _id: 5315545dafcb3c583086f86c },
-  { name: 'groceries', _id: 5315545dafcb3c583086f86d } ]
+  var lists =[];
+  lists.name = 'lists';
+  lists.items = [
+  {lid:'1', shops:'groceries'},
+  {lid:'2', shops:'hardware'},
+  {lid:'3', shops:'drugs'},
+  {lid:'4', shops:'groceries'},
+  {lid:'5', shops:'building'},
+  {lid:'6', shops:'garden'},
+  {lid:'7', shops:'groceries'}
+  ];
 
-var users=
-[
-  {
-    "name": "tim2",
-    "email": "mckt_jp@yahoo.com",
-    "lists": [],
-    "_id": "53176e851e86c0c02c9c42ef"
-  },
-  {
-    "_id": "53176e851e86c0c02c9c42ee",
-    "email": "mckenna.tim@gmail.com",
-    "lists": [
-      {
-        "name": "drugs",
-        "_id": "5315545dafcb3c583086f869"
-      },
-      {
-        "name": "groceries",
-        "_id": "5315545dafcb3c583086f86d"
-      },
-      {
-        "name": "hardware",
-        "_id": "5315545dafcb3c583086f868"
-      }
-    ],
-    "name": "tim"
-  },
-  {
-    "name": "tim3",
-    "email": "tim@sitebuilt.net",
-    "lists": [],
-    "_id": "5318e0f0525483e02dd18c55"
-  }
-]
-
-
+  var users = [];
+  users.name = 'users';
+  users.items= [
+  {name: 'tim', email: 'mckenna.tim@gmail.com', lists:[]},
+  {name: 'peri', email: 'perimckenna@gmail.com', lists:[]},
+  {name: 'tim2', email: 'mckt_jp@yahoo.com', lists:[]}
+  ];
+</pre>
 ===git commits===
 
 ;init: basic rest get functionality plus some put and post with curl 
