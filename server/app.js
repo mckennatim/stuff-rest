@@ -22,7 +22,8 @@ this.server.get('/', function(req, res) {
 
 this.server.get('/lists', stuff.findLists);
 this.server.get('/users', stuff.findUsers);
-this.server.get('/items', stuff.findItems);
+this.server.get('/products', stuff.findProducts);
+this.server.get('/products/:lid', stuff.findProductsByLid);
 this.server.post('/users', stuff.createUser);
 this.server.del('/users/:name', stuff.deleteUser);
 this.server.get('/users/:name', stuff.findUserByName);

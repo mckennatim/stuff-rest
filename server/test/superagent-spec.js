@@ -4,8 +4,8 @@ var expect = require('expect.js')
 describe('superagent:', function(){
   var name = 'tim7';
   var ucnt = 0;
-  var listId = '1';
-  var listShops = 'groceries';
+  var listId = '0';
+  var listShops = 'testShop';
   it('GET / should be running and return: please select...', function(done){
     superagent.get('http://localhost:3000')
       .end(function(e, res){
@@ -18,6 +18,23 @@ describe('superagent:', function(){
   })
   describe('users', function(){
     
+    it('DELs users/:name from users->success=1', function(done){
+      superagent.del('http://localhost:3000/users/'+name)
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.eql(1)
+          done()
+        })
+    }) 
+    it('GETs {} if users/:tim7 doesnt exist', function(done){
+      superagent.get('http://localhost:3000/users/'+name)
+        .end(function(e,res){
+          //console.log(res.body)
+          expect(res.body).to.eql({})
+          done()
+        })
+    })    
     it('GETs all users and counts em', function(done){
       superagent.get('http://localhost:3000/users')
         .end(function(e, res){
@@ -46,17 +63,6 @@ describe('superagent:', function(){
           done()
         })    
     })
-
-    it('rejects POST of duplicate user/:tim7 ->11000', function(done){
-      superagent.post('http://localhost:3000/users')
-        .send({name:name, email:"tim@sitebuilt.net", lists:[]})
-        .end(function(e,res){
-          //console.log(res.body.code)
-          expect(res.body.code).to.eql(11000)
-          done()
-        })    
-    })
-
     it('GETs all users expecting the count to go up', function(done){
       superagent.get('http://localhost:3000/users')
         .end(function(e, res){
@@ -71,31 +77,65 @@ describe('superagent:', function(){
           //console.log(listOfUsers.length);
           done()
         })
+    })    
+    it('GETs a users/:tim7', function(done){
+      superagent.get('http://localhost:3000/users/'+name)
+        .end(function(e,res){
+          //console.log(res.body)
+          expect(res.body.name).to.eql(name)
+          done()
+        })
     })
 
-    describe('users.lists', function(){
-      it('PUTs a new :list on /users/:name/:listId->list', function(done){
-        superagent.put('http://localhost:3000/users/'+name+'/'+listId)
-          .send()
-          .end(function(e, res){
-            //console.log(res.body)
-            expect(e).to.eql(null)
-            expect(typeof res.body).to.eql('object')
-            expect(res.body.lid).to.eql(listId) 
-            expect(res.body.shops).to.be(listShops)       
-            done()
-          })
-      })
+    it('rejects POST of duplicate user/:tim7 ->11000', function(done){
+      superagent.post('http://localhost:3000/users')
+        .send({name:name, email:"tim@sitebuilt.net", lists:[]})
+        .end(function(e,res){
+          //console.log(res.body.code)
+          expect(res.body.code).to.eql(11000)
+          done()
+        })    
     })
-     
-    it('DELs users/:name from users->success=1', function(done){
-      superagent.del('http://localhost:3000/users/'+name)
+
+    it('PUTs a new :list on /users/:name/:listId->list', function(done){
+      superagent.put('http://localhost:3000/users/'+name+'/'+listId)
+        .send()
         .end(function(e, res){
           //console.log(res.body)
           expect(e).to.eql(null)
-          expect(res.body).to.eql(1)
+          expect(typeof res.body).to.eql('object')
+          expect(res.body.lid).to.eql(listId) 
+          expect(res.body.shops).to.be(listShops)       
           done()
         })
-    }) 
+    })
+    it('rejects a PUT of new :list on /users/:name/:listId if exists', function(done){
+      superagent.put('http://localhost:3000/users/'+name+'/'+listId)
+        .send()
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.be('list already included')       
+          done()
+        })
+    })    
+         
+  })
+  describe('products', function(){
+    it('GETs all /products', function(done){
+      superagent.get('http://localhost:3000/products/')
+        .end(function(e,res){
+          expect(e).to.eql(null)
+          done()          
+        })
+    })
+    it('GETs all /products for /:listId 0', function(done){
+      superagent.get('http://localhost:3000/products/'+listId)
+        .end(function(e,res){
+          //console.log(res.body)          
+          expect(res.body.length).to.eql(5)          
+          done()          
+        })
+    })   
   })  
 })

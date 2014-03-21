@@ -52,9 +52,9 @@ exports.findUsers = function(req, res) {
     console.log('in findLists');
     find('users', res);
 };
-exports.findItems = function(req, res) {
+exports.findProducts = function(req, res) {
     console.log('in findLists');
-    find('items', res);
+    find('products', res);
 };
 exports.createUser = function(req, res){
     //res.cookie('name', 'tobi', { domain: 'localhost', path: '/framewks/rest', secure: true });
@@ -85,24 +85,60 @@ exports.findUserByName = function(req, res) {
         });
     });
 };
-exports.addList2user = function(req, res){
-    console.log('in addList2user');
-    var name =req.params.name; 
-    var lid =req.params.lid;
-    //var ObjectId = require('mongoose').Types.ObjectId;
-    db.collection('lists', function(err, collection) {
-        collection.findOne({lid:lid}, function(err, items) {
-            db.collection('users', function(err, collection) {
-                collection.update({name:name},{$push:{lists:items}}, {upsert:false}, function(err, saved) {
-                    res.jsonp(items);
-                    console.log(items);
-                });
-            });
-            //res.jsonp('saved');
+exports.findProductsByLid = function(req, res) {
+    console.log('in find user by name');
+    console.log(req.params);
+    var lid = req.params.lid;
+    db.collection('products', function(err, collection) {
+        collection.find({lid:lid}).toArray(function(err, items) {
+            //console.log(items);
+            res.jsonp(items);
         });
     });
 };
-
+exports.addList2user = function(req, res){
+  console.log('in addList2user');
+  var name =req.params.name; 
+  var lid =req.params.lid;
+  var ret ='0';
+  //var ObjectId = require('mongoose').Types.ObjectId;
+  db.collection('lists', function(err, collection) {
+    collection.findOne({lid:lid}, function(err, alist) {
+      if(err){
+        res.jsonp(err);
+      }else if (alist==null){
+        res.jsonp("null list with that lid");
+      } else {
+        db.collection('users', function(err, collection) {
+          collection.findOne({name:name},function(err,user){
+            var ulists = user.lists
+            console.log(ulists)
+            console.log(alist)
+            console.log(include(ulists,alist))
+            if (err){
+              ret.jsonp(err)
+            }else if(include(ulists,alist)){
+              res.jsonp('list already included');
+            }else{
+              console.log(alist)
+              collection.update({name:name},{$push:{lists:alist}}, {upsert:false}, function(err, saved) {
+                if(err){res.jsonp(err)}else{res.jsonp(alist)};
+              });
+            }                                       
+          });
+        });       
+      }
+    });
+  });
+};
+//does object exist in array
+function include(arr,obj) {
+  if (arr.length==0){
+    console.log('returning false')
+  }else{
+    return (arr.indexOf(obj) != -1)+1;
+  }
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Populate database with sample data -- Only used once: the first time the application is started.
 // You'd typically not find this code in a real-life app, since the database would already exist.
@@ -126,6 +162,11 @@ products.items = [
 {lid:'4',product:'bacon', done:false},
 {lid:'1',product:'apples', done:false},
 {lid:'5',product:'2x4-8\'', done:false},
+{lid:'0',product:'brown gravy', done:true},
+{lid:'0',product:'bags', done:true},
+{lid:'0',product:'applesauce', done:true},
+{lid:'0',product:'sugar', done:true},
+{lid:'0',product:'baby back ribs', done:true},
 {lid:'1',product:'brown gravy', done:true},
 {lid:'7',product:'bags', done:true},
 {lid:'7',product:'applesauce', done:true},
@@ -143,7 +184,8 @@ lists.items = [
 {lid:'4', shops:'groceries'},
 {lid:'5', shops:'building'},
 {lid:'6', shops:'garden'},
-{lid:'7', shops:'groceries'}
+{lid:'7', shops:'groceries'},
+{lid:'0', shops:'testShop'}
 ];
 
 var users = [];
