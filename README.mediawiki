@@ -1,15 +1,28 @@
 ===using superagent and mocha for testing===
 
- superagent:
-   √ GET / should be running and return: please select...
-   users
-     √ GETs all users and counts em
-     √ POSTs a new /user/:tim7 -> full array of objects
-     √ rejects POST of duplicate user/:tim7 ->11000
-     √ GETs all users expecting the count to go up
-     √ DELs users/:name from users->success=1
-     users.lists
-       √ PUTs a new :list on /users/:name/:listId->list
+
+  superagent:
+    √ GET / should be running and return: please select...
+    users
+      √ DELs users/:name from users->success=1
+      √ GETs {} if users/:tim7 doesnt exist
+      √ GETs all users and counts em
+      √ POSTs a new /user/:tim7 -> full array of objects
+      √ GETs all users expecting the count to go up
+      √ GETs a users/:tim7
+      √ rejects POST of duplicate user/:tim7 ->11000
+      √ PUTs a new :list on /users/:name/:listId->list
+      √ rejects a PUT of new :list on /users/:name/:listId if exists
+    products
+      √ GETs all /products
+      √ GETs all /products for /:listId 0
+
+
+  12 passing (86ms)
+products
+GETs all /products
+GETs all /prducts/:list 
+GETs all /users/:name/:shop
 
 
  7 passing (63ms)
