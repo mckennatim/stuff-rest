@@ -1,6 +1,7 @@
 ===using superagent and mocha for testing===
 
 
+
   superagent:
     √ GET / should be running and return: please select...
     users
@@ -12,21 +13,16 @@
       √ GETs a users/:tim7
       √ rejects POST of duplicate user/:tim7 ->11000
       √ PUTs a new :list on /users/:name/:listId->list
-      √ rejects a PUT of new :list on /users/:name/:listId if exists
+      √ rejects a PUT of new :list on /users->list already included
     products
       √ GETs all /products
       √ GETs all /products for /:listId 0
 
 
   12 passing (86ms)
-products
-GETs all /products
-GETs all /prducts/:list 
+todo
+
 GETs all /users/:name/:shop
-
-
- 7 passing (63ms)
-
 
 ===using curl to access rest.api===
 curl http://localhost:3020/users

@@ -109,7 +109,7 @@ describe('superagent:', function(){
           done()
         })
     })
-    it('rejects a PUT of new :list on /users/:name/:listId if exists', function(done){
+    it('rejects a PUT of new :list on /users->list already included', function(done){
       superagent.put('http://localhost:3000/users/'+name+'/'+listId)
         .send()
         .end(function(e, res){
