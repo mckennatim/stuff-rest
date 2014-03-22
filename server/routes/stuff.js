@@ -100,7 +100,7 @@ exports.addList2user = function(req, res){
   console.log('in addList2user');
   var name =req.params.name; 
   var lid =req.params.lid;
-  var ret ='0';
+  var shopName;
   //var ObjectId = require('mongoose').Types.ObjectId;
   db.collection('lists', function(err, collection) {
     collection.findOne({lid:lid}, function(err, alist) {
@@ -109,23 +109,31 @@ exports.addList2user = function(req, res){
       }else if (alist==null){
         res.jsonp("null list with that lid");
       } else {
+        shopName=alist.shops
         db.collection('users', function(err, collection) {
-          collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,user){
-            console.log(user[0].lists==undefined)
-            console.log(user[0].lists)
-            //console.log(user.lists[0])
+          collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,userLid){
+            //console.log(userLid[0].lists==undefined)
+            console.log(userLid[0].lists)
             if (err){
               ret.jsonp(err)
-            }else if(false){
+            }else if(userLid[0].lists!=undefined){
+              console.log('!undefined-list already included');
               res.jsonp('list already included');
-            }else if(false){
-              res.jsonp('name taken, choose another');
             }else{
-              //console.log(alist)
-              collection.update({name:name},{$push:{lists:alist}}, {upsert:false}, function(err, saved) {
-                if(err){res.jsonp(err)}else{res.jsonp(alist)};
+              collection.find({name:name},{lists:{$elemMatch:{shops:shopName}}}).toArray(function(err,userName){
+                console.log(userName);
+                if(userName[0].lists!=undefined){
+                  console.log('!undefined-name taken, choose another');
+                  res.jsonp('name taken, choose another');
+                }else{
+                  collection.update({name:name},{$push:{lists:alist}}, {upsert:false}, function(err, saved) {
+                    if(err){res.jsonp(err)}else{
+                      console.log('adding this list')
+                      res.jsonp(alist)};
+                  });
+                }
               });
-            }                                       
+            }                                      
           });
         });       
       }
@@ -135,8 +143,7 @@ exports.addList2user = function(req, res){
 
 
 /*------------------------------------------------------------------------------------------------*/
-// Populate database with sample data -- Only used once: the first time the application is started.
-// You'd typically not find this code in a real-life app, since the database would already exist.
+
 var populateDB = function(huh) {
     console.log("Populating database...");
     var name= huh.name;

@@ -144,7 +144,7 @@ describe('superagent:', function(){
       superagent.get('http://localhost:3000/products/'+listId)
         .end(function(e,res){
           //console.log(res.body)          
-          expect(res.body.length).to.eql(5)          
+          expect(res.body.length).to.eql(4)          
           done()          
         })
     })   

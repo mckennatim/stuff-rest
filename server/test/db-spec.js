@@ -13,7 +13,7 @@ describe('basic database tests', function(){
     var lid ='0'
     db.collection('users', function(err, collection) {
       collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,user){
-        console.log(user[0].lists);
+        //console.log(user[0].lists);
         assert.equal(user[0].lists[0].lid.lid);
         done();
       });
@@ -24,7 +24,7 @@ describe('basic database tests', function(){
     var lid ='0'
     db.collection('users', function(err, collection) {
       collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,user){
-        console.log(user[0].lists);
+        //console.log(user[0].lists);
         assert.equal(user[0].lists,undefined);
         done();
       });
@@ -35,7 +35,7 @@ describe('basic database tests', function(){
     var lid ='090'
     db.collection('users', function(err, collection) {
       collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,user){
-        console.log(user[0].lists);
+        //console.log(user[0].lists);
         assert.equal(1,1);
         done();
       });

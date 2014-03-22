@@ -1,6 +1,8 @@
 ===using superagent and mocha for testing===
-
-
+  basic database tests
+    √ should match for name and lid
+    √ if there are no lists for user it should be undefined
+    √ should be undefined if lid doesnt match any list
 
   superagent:
     √ GET / should be running and return: please select...
@@ -14,18 +16,17 @@
       √ rejects POST of duplicate user/:tim7 ->11000
       √ PUTs a new :list on /users/:name/:listId->list
       √ rejects a PUT of new :list on /users->list already included
+      √ reject a PUT of new :list for user -> name taken, choose another
     products
       √ GETs all /products
       √ GETs all /products for /:listId 0
 
 
-  12 passing (86ms)
+  16 passing (139ms)
 todo
 
-reject a PUT of new :list for user -> name taken, choose another
-GETs all /users/:name/:shop
+GETs all /products/:name/:shop
 
-implement http://docs.mongodb.org/manual/reference/operator/projection/elemMatch/
 
 
 
