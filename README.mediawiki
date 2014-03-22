@@ -20,15 +20,12 @@
     products
       √ GETs all /products
       √ GETs all /products for /:listId 0
+      √ GETs /products/:name/:shops
+      √ fails to GETs /products/:name/:shopNoExist
 
 
-  16 passing (139ms)
+  18 passing (148ms)
 todo
-
-GETs all /products/:name/:shop
-
-
-
 
 ===using curl to access rest.api===
 curl http://localhost:3020/users

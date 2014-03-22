@@ -141,7 +141,33 @@ exports.addList2user = function(req, res){
   });
 };
 
+exports.findProducts4UserByLname = function(req, res) {
+  console.log('in find /products/:name/:shops by name');
+  console.log(req.params);
+  var name = req.params.name;
+  var shops = req.params.shops;
+  var lid;
+  db.collection('users', function(err, collection) {
+    collection.find({name:name},{lists:{$elemMatch:{shops:shops}}}).toArray(function(err,listInfo){
+      //console.log(listInfo[0].lists);
+      if(listInfo[0].lists==undefined){
+        res.jsonp('that list doesn\'t exist')
+      }else{
+        lid = listInfo[0].lists[0].lid;
+        db.collection('products', function(err, collection) {
+          collection.find({lid:lid}).toArray(function(err,theList){
+            //console.log(theList)
+            res.jsonp(theList)
+          })
+        })
+      }
+    })    
+  })
 
+
+  //get lid from users
+  //findProductsByLid;
+}
 /*------------------------------------------------------------------------------------------------*/
 
 var populateDB = function(huh) {

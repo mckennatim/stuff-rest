@@ -147,6 +147,24 @@ describe('superagent:', function(){
           expect(res.body.length).to.eql(4)          
           done()          
         })
-    })   
+    })
+    it('GETs /products/:name/:shops', function(done){
+      superagent.get('http://localhost:3000/products/'+name+'/'+listShops)
+        .end(function(e,res){      
+          //console.log(res.body)          
+          expect(e).to.eql(null)
+          expect(res.body).to.be.an('array')          
+          done()
+        })          
+    })  
+    it('fails to GETs /products/:name/:shopNoExist', function(done){
+      superagent.get('http://localhost:3000/products/'+name+'/z'+listShops)
+        .end(function(e,res){      
+          //console.log(res.body)          
+          expect(e).to.eql(null)
+          expect(res.body).to.eql('that list doesn\'t exist')          
+          done()
+        })          
+    })  
   })  
 })
