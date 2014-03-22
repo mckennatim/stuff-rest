@@ -22,7 +22,12 @@
   12 passing (86ms)
 todo
 
+reject a PUT of new :list for user -> name taken, choose another
 GETs all /users/:name/:shop
+
+implement http://docs.mongodb.org/manual/reference/operator/projection/elemMatch/
+
+
 
 ===using curl to access rest.api===
 curl http://localhost:3020/users

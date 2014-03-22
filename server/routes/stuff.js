@@ -110,17 +110,18 @@ exports.addList2user = function(req, res){
         res.jsonp("null list with that lid");
       } else {
         db.collection('users', function(err, collection) {
-          collection.findOne({name:name},function(err,user){
-            var ulists = user.lists
-            console.log(ulists)
-            console.log(alist)
-            console.log(include(ulists,alist))
+          collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,user){
+            console.log(user[0].lists==undefined)
+            console.log(user[0].lists)
+            //console.log(user.lists[0])
             if (err){
               ret.jsonp(err)
-            }else if(include(ulists,alist)){
+            }else if(false){
               res.jsonp('list already included');
+            }else if(false){
+              res.jsonp('name taken, choose another');
             }else{
-              console.log(alist)
+              //console.log(alist)
               collection.update({name:name},{$push:{lists:alist}}, {upsert:false}, function(err, saved) {
                 if(err){res.jsonp(err)}else{res.jsonp(alist)};
               });
@@ -131,15 +132,9 @@ exports.addList2user = function(req, res){
     });
   });
 };
-//does object exist in array
-function include(arr,obj) {
-  if (arr.length==0){
-    console.log('returning false')
-  }else{
-    return (arr.indexOf(obj) != -1)+1;
-  }
-}
-/*--------------------------------------------------------------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------------------------------------*/
 // Populate database with sample data -- Only used once: the first time the application is started.
 // You'd typically not find this code in a real-life app, since the database would already exist.
 var populateDB = function(huh) {
@@ -165,7 +160,7 @@ products.items = [
 {lid:'0',product:'brown gravy', done:true},
 {lid:'0',product:'bags', done:true},
 {lid:'0',product:'applesauce', done:true},
-{lid:'0',product:'sugar', done:true},
+{lid:'00',product:'sugar', done:true},
 {lid:'0',product:'baby back ribs', done:true},
 {lid:'1',product:'brown gravy', done:true},
 {lid:'7',product:'bags', done:true},
@@ -185,7 +180,8 @@ lists.items = [
 {lid:'5', shops:'building'},
 {lid:'6', shops:'garden'},
 {lid:'7', shops:'groceries'},
-{lid:'0', shops:'testShop'}
+{lid:'0', shops:'testShop'},
+{lid:'00', shops:'testShop'}
 ];
 
 var users = [];

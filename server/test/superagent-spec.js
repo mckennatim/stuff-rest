@@ -5,6 +5,7 @@ describe('superagent:', function(){
   var name = 'tim7';
   var ucnt = 0;
   var listId = '0';
+  var otherListId = '00';
   var listShops = 'testShop';
   it('GET / should be running and return: please select...', function(done){
     superagent.get('http://localhost:3000')
@@ -77,7 +78,8 @@ describe('superagent:', function(){
           //console.log(listOfUsers.length);
           done()
         })
-    })    
+    })
+    +    
     it('GETs a users/:tim7', function(done){
       superagent.get('http://localhost:3000/users/'+name)
         .end(function(e,res){
@@ -119,7 +121,16 @@ describe('superagent:', function(){
           done()
         })
     })    
-         
+    it('reject a PUT of new :list for user -> name taken, choose another', function(done){
+      superagent.put('http://localhost:3000/users/'+name+'/'+otherListId)
+        .send()
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.be('name taken, choose another')       
+          done()
+        })
+    })         
   })
   describe('products', function(){
     it('GETs all /products', function(done){
