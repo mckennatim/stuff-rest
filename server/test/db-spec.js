@@ -8,17 +8,7 @@ result = [];
 
 describe('basic database tests', function(){
 
-  it('should match for name and lid', function(done){
-    var name='tim7'
-    var lid ='0'
-    db.collection('users', function(err, collection) {
-      collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,user){
-        //console.log(user[0].lists);
-        assert.equal(user[0].lists[0].lid,lid);
-        done();
-      });
-    });       
-  });
+
   it('if there are no lists for user it should be undefined', function(done){
     var name='tim'
     var lid ='0'

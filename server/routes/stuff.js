@@ -18,7 +18,7 @@ mongoClient.open(function(err, mongoClient) {
         populateDB(users);
         db.collection('users', function(err, collection) {
           collection.ensureIndex({name:1},{unique:true}, function(err, saved) {
-              console.log(err);
+              //console.log(err);
           });
         });
       };
@@ -30,7 +30,7 @@ mongoClient.open(function(err, mongoClient) {
         populateDB(lists);
         db.collection('lists', function(err, collection) {
           collection.ensureIndex({lid:1}, function(err, saved) {
-              console.log(err);
+              //console.log(err);
           });
         });        
       }
@@ -41,7 +41,7 @@ mongoClient.open(function(err, mongoClient) {
         populateDB(products);
         db.collection('products', function(err, collection) {
           collection.ensureIndex({lid:1,done:-1,product:1}, function(err, saved) {
-              console.log(err);
+              //console.log(err);
           });
         });
       }
@@ -69,7 +69,7 @@ exports.findProducts = function(req, res) {
     find('products', res);
 };
 exports.createUser = function(req, res){
-  //res.cookie('name', 'tobi', { domain: 'localhost', path: '/framewks/rest', secure: true });
+  console.log('in createUser');
   var body= req.body; 
   db.collection('users', function(err, collection) {
       collection.insert(body, function(err, saved) {
@@ -252,6 +252,7 @@ var users = [];
 users.name = 'users';
 users.items= [
 {name: 'tim', email: 'mckenna.tim@gmail.com', lists:[]},
+{name: 'tim7', email: 'mckenna.tim@gmail.com', lists:[]},
 {name: 'peri', email: 'perimckenna@gmail.com', lists:[]},
 {name: 'tim2', email: 'mckt_jp@yahoo.com', lists:[]}
 ];

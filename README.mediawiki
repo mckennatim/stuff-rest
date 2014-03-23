@@ -30,7 +30,11 @@
 
   21 passing (177ms)
 todo
-
+:PUTs update /product/:pid to done
+:PUTs change in /product/:pid to new product name
+:PUTs a relpacement /list/:lid 
+:have the root be /api
+:[http://blog.auth0.com/2014/01/07/angularjs-authentication-with-cookies-vs-token/ angularjs-authentication-with-cookies-vs-token]
 ===using curl to access rest.api===
 curl http://localhost:3020/users
 
