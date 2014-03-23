@@ -1,4 +1,5 @@
 ===using superagent and mocha for testing===
+
   basic database tests
     √ should match for name and lid
     √ if there are no lists for user it should be undefined
@@ -21,10 +22,13 @@
       √ GETs all /products
       √ GETs all /products for /:listId 0
       √ GETs /products/:name/:shops
-      √ fails to GETs /products/:name/:shopNoExist
+      √ fails to GETs /products/:name Or/:shopNoExists
+      √ POSTs new /product/:lid
+      √ checks that product count ^ and new product is there
+      √ DELs products/:_id->success=1
 
 
-  18 passing (148ms)
+  21 passing (177ms)
 todo
 
 ===using curl to access rest.api===

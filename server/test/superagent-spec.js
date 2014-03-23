@@ -1,5 +1,6 @@
 var superagent = require('superagent')
 var expect = require('expect.js')
+var _ = require('underscore')
 
 describe('superagent:', function(){
   var name = 'tim7';
@@ -133,6 +134,10 @@ describe('superagent:', function(){
     })         
   })
   describe('products', function(){
+    var productCnt = 4;
+    var pid;
+    var product = 'hot dog with craut';
+
     it('GETs all /products', function(done){
       superagent.get('http://localhost:3000/products/')
         .end(function(e,res){
@@ -144,7 +149,7 @@ describe('superagent:', function(){
       superagent.get('http://localhost:3000/products/'+listId)
         .end(function(e,res){
           //console.log(res.body)          
-          expect(res.body.length).to.eql(4)          
+          expect(res.body.length).to.eql(productCnt)          
           done()          
         })
     })
@@ -157,14 +162,48 @@ describe('superagent:', function(){
           done()
         })          
     })  
-    it('fails to GETs /products/:name/:shopNoExist', function(done){
-      superagent.get('http://localhost:3000/products/'+name+'/z'+listShops)
+    it('fails to GETs /products/:name Or/:shopNoExists', function(done){
+      superagent.get('http://localhost:3000/products/z'+name+'/z'+listShops)
         .end(function(e,res){      
           //console.log(res.body)          
           expect(e).to.eql(null)
-          expect(res.body).to.eql('that list doesn\'t exist')          
+          expect(res.body).to.eql('that list or user doesn\'t exist')          
           done()
         })          
-    })  
+    })
+    it('POSTs new /product/:lid', function(done){
+      superagent.post('http://localhost:3000/products/'+listId)
+        .send({lid:listId, product:product, done:false, tags:[]})
+        .end(function(e,res){
+          //console.log(res.body)
+          pid = res.body[0]._id;
+          //console.log(pid)         
+          expect(e).to.eql(null)
+          expect(res.body.length).to.eql(1)
+          expect(res.body[0]._id.length).to.eql(24)
+          expect(res.body[0].product).to.be(product)
+          done()
+        })       
+    })
+    it('checks that product count ^ and new product is there', function(done){
+      superagent.get('http://localhost:3000/products/'+listId)
+        .end(function(e,res){
+          //console.log(res.body) 
+          var theRec= _.where(res.body,{_id:pid})
+          //console.log(theRec)
+          expect(theRec[0].product).to.eql(product)
+          expect(res.body.length).to.eql(productCnt+1)          
+          done()          
+        })
+    })
+    it('DELs products/:_id->success=1', function(done){
+      superagent.del('http://localhost:3000/products/'+pid)
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.eql(1)
+          done()
+        })
+    })       
   })  
 })

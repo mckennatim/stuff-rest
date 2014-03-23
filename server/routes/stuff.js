@@ -2,6 +2,8 @@ console.log("in stuff")
 var MongoClient = require('mongodb').MongoClient,
     Server = require('mongodb').Server,    
     db;
+//to translate mongo id string to mongo _id
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var mongoClient = new MongoClient(new Server('localhost', 27017));
 mongoClient.open(function(err, mongoClient) {
@@ -23,16 +25,26 @@ mongoClient.open(function(err, mongoClient) {
     });  
     //console.log(db)
     db.collection('lists', {strict:true}, function(err, collection) {
-        if (err) {
-            console.log("The 'lists' collection doesn't exist. Creating it with sample data...");
-            populateDB(lists);
-        }
+      if (err) {
+        console.log("The 'lists' collection doesn't exist. Creating it with sample data...");
+        populateDB(lists);
+        db.collection('lists', function(err, collection) {
+          collection.ensureIndex({lid:1}, function(err, saved) {
+              console.log(err);
+          });
+        });        
+      }
     });
     db.collection('products', {strict:true}, function(err, collection) {
-        if (err) {
-            console.log("The 'products' collection doesn't exist. Creating it with sample data...");
-            populateDB(products);
-        }
+      if (err) {
+        console.log("The 'products' collection doesn't exist. Creating it with sample data...");
+        populateDB(products);
+        db.collection('products', function(err, collection) {
+          collection.ensureIndex({lid:1,done:-1,product:1}, function(err, saved) {
+              console.log(err);
+          });
+        });
+      }
     });  
 }); 
 
@@ -57,22 +69,23 @@ exports.findProducts = function(req, res) {
     find('products', res);
 };
 exports.createUser = function(req, res){
-    //res.cookie('name', 'tobi', { domain: 'localhost', path: '/framewks/rest', secure: true });
-    var body= req.body; 
-    db.collection('users', function(err, collection) {
-        collection.insert(body, function(err, saved) {
-            if(err){res.jsonp(err)}else{res.jsonp(saved)};
-        });
-    });      
-};exports.deleteUser = function(req, res){
-    console.log('in delete user by name');
-    console.log(req.params);
-    var name = req.params.name;
-    db.collection('users', function(err, collection) {
-        collection.remove({name:name}, function(err, saved) {
-            if(err){res.jsonp(err)}else{res.jsonp(saved)};
-        });
-    });      
+  //res.cookie('name', 'tobi', { domain: 'localhost', path: '/framewks/rest', secure: true });
+  var body= req.body; 
+  db.collection('users', function(err, collection) {
+      collection.insert(body, function(err, saved) {
+          if(err){res.jsonp(err)}else{res.jsonp(saved)};
+      });
+  });      
+};
+exports.deleteUser = function(req, res){
+  console.log('in delete user by name');
+  console.log(req.params);
+  var name = req.params.name;
+  db.collection('users', function(err, collection) {
+    collection.remove({name:name}, function(err, saved) {
+      if(err){res.jsonp(err)}else{res.jsonp(saved)};
+    });
+  });      
 };
 exports.findUserByName = function(req, res) {
     console.log('in find user by name');
@@ -149,9 +162,9 @@ exports.findProducts4UserByLname = function(req, res) {
   var lid;
   db.collection('users', function(err, collection) {
     collection.find({name:name},{lists:{$elemMatch:{shops:shops}}}).toArray(function(err,listInfo){
-      //console.log(listInfo[0].lists);
-      if(listInfo[0].lists==undefined){
-        res.jsonp('that list doesn\'t exist')
+      console.log(listInfo[0]);
+      if(listInfo[0]==undefined){
+        res.jsonp('that list or user doesn\'t exist')
       }else{
         lid = listInfo[0].lists[0].lid;
         db.collection('products', function(err, collection) {
@@ -163,10 +176,28 @@ exports.findProducts4UserByLname = function(req, res) {
       }
     })    
   })
-
-
-  //get lid from users
-  //findProductsByLid;
+}
+exports.addProduct4Lid=function(req, res){
+  console.log('in addProduct4Lid');
+  console.log(req.params);
+  var lid = req.params.lid;
+  var body= req.body; 
+  console.log(body);
+  db.collection('products', function(err, collection) {
+      collection.insert(body, function(err, saved) {
+          if(err){res.jsonp(err)}else{res.jsonp(saved)};
+      });
+  });  
+}  
+exports.deleteProduct=function(req,res){
+  console.log('in delete product by _id');
+  console.log(req.params);
+  var pid = ObjectId(req.params.pid);
+  db.collection('products', function(err, collection) {
+    collection.remove({_id:pid}, function(err, saved) {
+      if(err){res.jsonp(err)}else{res.jsonp(saved)};
+    });
+  });      
 }
 /*------------------------------------------------------------------------------------------------*/
 

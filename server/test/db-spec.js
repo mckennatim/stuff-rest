@@ -14,7 +14,7 @@ describe('basic database tests', function(){
     db.collection('users', function(err, collection) {
       collection.find({name:name},{lists:{$elemMatch:{lid:lid}}}).toArray(function(err,user){
         //console.log(user[0].lists);
-        assert.equal(user[0].lists[0].lid.lid);
+        assert.equal(user[0].lists[0].lid,lid);
         done();
       });
     });       

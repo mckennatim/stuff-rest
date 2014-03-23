@@ -25,6 +25,8 @@ this.server.get('/users', stuff.findUsers);
 this.server.get('/products', stuff.findProducts);
 this.server.get('/products/:lid', stuff.findProductsByLid);
 this.server.get('/products/:name/:shops', stuff.findProducts4UserByLname);
+this.server.post('/products/:lid', stuff.addProduct4Lid);
+this.server.del('/products/:pid', stuff.deleteProduct);
 this.server.post('/users', stuff.createUser);
 this.server.del('/users/:name', stuff.deleteUser);
 this.server.get('/users/:name', stuff.findUserByName);
