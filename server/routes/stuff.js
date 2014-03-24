@@ -99,7 +99,7 @@ exports.findUserByName = function(req, res) {
     });
 };
 exports.findProductsByLid = function(req, res) {
-    console.log('in find user by name');
+    console.log('in find products by lid');
     console.log(req.params);
     var lid = req.params.lid;
     db.collection('products', function(err, collection) {
@@ -108,6 +108,50 @@ exports.findProductsByLid = function(req, res) {
             res.jsonp(items);
         });
     });
+};
+exports.findProductsDone4Lid = function(req, res) {
+  console.log('in products done 4 lid');
+  console.log(req.params);
+  var lid = req.params.lid;
+  db.collection('products', function(err, collection) {
+    collection.find({lid:lid,done:true}).toArray(function(err, items) {
+      //console.log(items);
+      res.jsonp(items);
+    });
+  });
+};
+exports.findProductsNeeded4Lid = function(req, res) {
+  console.log('in products needed 4 lid');
+  console.log(req.params);
+  var lid = req.params.lid;
+  db.collection('products', function(err, collection) {
+    collection.find({lid:lid,done:false}).toArray(function(err, items) {
+      //console.log(items);
+      res.jsonp(items);
+    });
+  });
+};
+exports.updateProduct2needed = function(req,res){
+  console.log('in update products 2 needed');
+  console.log(req.params);
+  var pid = ObjectId(req.params.pid);
+  db.collection('products', function(err, collection) {
+    collection.update({_id:pid},{$set:{done:false}},function(err, items) {
+      console.log(items);
+      res.jsonp(items);
+    });
+  });
+};
+exports.updateProduct2done = function(req,res){
+  console.log('in update products 2 needed');
+  console.log(req.params);
+  var pid = ObjectId(req.params.pid);
+  db.collection('products', function(err, collection) {
+    collection.update({_id:pid},{$set:{done:true}},function(err, items) {
+      console.log(items);
+      res.jsonp(items);
+    });
+  });
 };
 exports.addList2user = function(req, res){
   console.log('in addList2user');

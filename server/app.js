@@ -27,14 +27,20 @@ this.server.get('/api/', function(req, res) {
 });
 
 this.server.get('/api/lists', stuff.findLists);
+
 this.server.get('/api/users', stuff.findUsers);
-this.server.get('/api/products', stuff.findProducts);
-this.server.get('/api/products/:lid', stuff.findProductsByLid);
-this.server.get('/api/products/:name/:shops', stuff.findProducts4UserByLname);
-this.server.post('/api/products/:lid', stuff.addProduct4Lid);
-this.server.del('/api/products/:pid', stuff.deleteProduct);
-this.server.post('/api/users', stuff.createUser);
+this.server.post('/api/users', stuff.createUser); //POST=Create
 this.server.del('/api/users/:name', stuff.deleteUser);
 this.server.get('/api/users/:name', stuff.findUserByName);
-this.server.put('/api/users/:name/:lid', stuff.addList2user);
+this.server.put('/api/users/:name/:lid', stuff.addList2user);//PUT=Update
+
+this.server.get('/api/products', stuff.findProducts);
+this.server.get('/api/products/:lid', stuff.findProductsByLid);
+this.server.get('/api/products/done/:lid', stuff.findProductsDone4Lid);
+this.server.get('/api/products/needed/:lid', stuff.findProductsNeeded4Lid);
+this.server.get('/api/products/:name/:shops', stuff.findProducts4UserByLname);
+this.server.post('/api/products/:lid', stuff.addProduct4Lid);//POST=Create new prouct
+this.server.del('/api/products/:pid', stuff.deleteProduct);
+this.server.put('/api/products/needed/:pid', stuff.updateProduct2needed);
+this.server.put('/api/products/done/:pid', stuff.updateProduct2done);
 

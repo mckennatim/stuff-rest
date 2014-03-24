@@ -138,6 +138,8 @@ describe('superagent:', function(){
     var productCnt = 4;
     var pid;
     var product = 'hot dog with craut';
+    var wasDonePid;
+    var wasNeededPid;
 
     it('GETs all /products', function(done){
       superagent.get(httpLoc+'products/')
@@ -209,14 +211,56 @@ describe('superagent:', function(){
     it('GETs /products/done/:lid for list' ,function(done){
       superagent.get(httpLoc+'products/done/'+listId)
         .end(function(e, res){
-          console.log(res.body)
-          expect(e).to.eql('frog')
+          //console.log(res.body)
+          wasDonePid=res.body[0]._id
+          //console.log(wasDonePid)
+          expect(e).to.eql(null)
+          expect(res.body).to.be.an('array')
+          expect(res.body.length).to.eql(productCnt)
+          done()
+        })
+    })
+    it('GETs no /products/needed/:lid for list' ,function(done){
+      superagent.get(httpLoc+'products/needed/'+listId)
+        .end(function(e, res){
+          //console.log(res.body)
+          //wasNeededPid=res.body[0]._id
+          //console.log(wasDonePid)
+          expect(e).to.eql(null)
+          expect(res.body).to.be.an('array')
+          expect(res.body.length).to.eql(0)
           done()
         })
     })
     it('PUTs update /product/:pid to needed', function(done){
-      expect(e).to.eql('frog')
-      done()
-    })       
-  })  
+      superagent.put(httpLoc+'products/needed/'+wasDonePid)
+        .send()
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.eql(1)
+          done()
+        })
+    })
+    it('GETs 1 /products/needed/:lid for list' ,function(done){
+      superagent.get(httpLoc+'products/needed/'+listId)
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.be.an('array')
+          expect(res.body[0]._id).to.eql(wasDonePid)
+          done()
+        })
+    })
+    it('PUTs update /product/:pid to done', function(done){
+      superagent.put(httpLoc+'products/done/'+wasDonePid)
+        .send()
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.eql(1)
+          done()
+        })
+    })              
+  }) 
 })
