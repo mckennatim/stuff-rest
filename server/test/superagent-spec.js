@@ -1,6 +1,8 @@
 var superagent = require('superagent')
 var expect = require('expect.js')
 var _ = require('underscore')
+var util = require('../../util/util.js');
+
 var httpLoc = 'http://localhost:3000/api/'
 
 describe('superagent:', function(){
@@ -276,5 +278,19 @@ describe('superagent:', function(){
           done()
         })
     })              
-  }) 
+  })
+/*----------------------------------------------------------------------------------*/
+  describe('lists', function(){
+    var newListId;
+
+    it('GETs timestamp for /lists/:lid', function(done){
+      superagent.get(httpLoc+'lists/'+listId)
+        .end(function(e,res){
+          console.log(util.ity.createRandomWord(7))
+          expect(e).to.be(null)
+          expect(res.body.timestamp).to.be.greaterThan(1300000000000)
+          done()
+        })
+    })
+  })   
 })

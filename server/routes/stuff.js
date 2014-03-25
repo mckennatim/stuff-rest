@@ -4,7 +4,7 @@ var MongoClient = require('mongodb').MongoClient,
     db;
 //to translate mongo id string to mongo _id
 var ObjectId = require('mongoose').Types.ObjectId;
-
+/*---------------------------------------------------------------------------*/
 var mongoClient = new MongoClient(new Server('localhost', 27017));
 mongoClient.open(function(err, mongoClient) {
     db = mongoClient.db("stuffDb");
@@ -68,6 +68,8 @@ exports.findProducts = function(req, res) {
     console.log('in findLists');
     find('products', res);
 };
+/*-------------------USER functions----------------------------*/
+
 exports.createUser = function(req, res){
   console.log('in createUser');
   var body= req.body; 
@@ -98,51 +100,7 @@ exports.findUserByName = function(req, res) {
         });
     });
 };
-exports.findProductsByLid = function(req, res) {
-    console.log('in find products by lid');
-    console.log(req.params);
-    var lid = req.params.lid;
-    db.collection('products', function(err, collection) {
-        collection.find({lid:lid}).toArray(function(err, items) {
-            //console.log(items);
-            res.jsonp(items);
-        });
-    });
-};
-exports.findProductsDone4Lid = function(req, res) {
-  console.log('in products done 4 lid');
-  console.log(req.params);
-  var lid = req.params.lid;
-  db.collection('products', function(err, collection) {
-    collection.find({lid:lid,done:true}).toArray(function(err, items) {
-      //console.log(items);
-      res.jsonp(items);
-    });
-  });
-};
-exports.findProductsNeeded4Lid = function(req, res) {
-  console.log('in products needed 4 lid');
-  console.log(req.params);
-  var lid = req.params.lid;
-  db.collection('products', function(err, collection) {
-    collection.find({lid:lid,done:false}).toArray(function(err, items) {
-      //console.log(items);
-      res.jsonp(items);
-    });
-  });
-};
-exports.updateProduct = function(req,res){
-  console.log('in update product/:pid');
-  console.log(req.params);
-  var body=req.body;
-  var pid = ObjectId(req.params.pid);
-  db.collection('products', function(err, collection) {
-    collection.update({_id:pid},{$set:body},function(err, items) {
-      console.log(items);
-      res.jsonp(items);
-    });
-  });
-};
+
 exports.addList2user = function(req, res){
   console.log('in addList2user');
   var name =req.params.name; 
@@ -188,6 +146,53 @@ exports.addList2user = function(req, res){
   });
 };
 
+/*-------------------------PRODUCT functions---------------------------*/
+
+exports.findProductsByLid = function(req, res) {
+    console.log('in find products by lid');
+    console.log(req.params);
+    var lid = req.params.lid;
+    db.collection('products', function(err, collection) {
+        collection.find({lid:lid}).toArray(function(err, items) {
+            //console.log(items);
+            res.jsonp(items);
+        });
+    });
+};
+exports.findProductsDone4Lid = function(req, res) {
+  console.log('in products done 4 lid');
+  console.log(req.params);
+  var lid = req.params.lid;
+  db.collection('products', function(err, collection) {
+    collection.find({lid:lid,done:true}).toArray(function(err, items) {
+      //console.log(items);
+      res.jsonp(items);
+    });
+  });
+};
+exports.findProductsNeeded4Lid = function(req, res) {
+  console.log('in products needed 4 lid');
+  console.log(req.params);
+  var lid = req.params.lid;
+  db.collection('products', function(err, collection) {
+    collection.find({lid:lid,done:false}).toArray(function(err, items) {
+      //console.log(items);
+      res.jsonp(items);
+    });
+  });
+};
+exports.updateProduct = function(req,res){
+  console.log('in update product/:pid');
+  console.log(req.params);
+  var body=req.body;
+  var pid = ObjectId(req.params.pid);
+  db.collection('products', function(err, collection) {
+    collection.update({_id:pid},{$set:body},function(err, items) {
+      console.log(items);
+      res.jsonp(items);
+    });
+  });
+};
 exports.findProducts4UserByLname = function(req, res) {
   console.log('in find /products/:name/:shops by name');
   console.log(req.params);
@@ -233,6 +238,22 @@ exports.deleteProduct=function(req,res){
     });
   });      
 }
+
+/*--------------------------------LIST functions----------------------------------------*/
+
+exports.getList=function(req,res){
+  console.log('in getList by lid');
+  console.log(req.params);
+  var lid = req.params.lid;
+  db.collection('lists', function(err, collection) {
+    collection.findOne({lid:lid}, function(err, items) {
+      if(err){res.jsonp(err)}else{res.jsonp(items)};
+    })
+  })
+}
+
+
+
 /*------------------------------------------------------------------------------------------------*/
 
 var populateDB = function(huh) {
@@ -249,37 +270,37 @@ var populateDB = function(huh) {
 var products =[];
 products.name = 'products';
 products.items = [   
-{lid:'1',product:'banana', done:false},
-{lid:'4',product:'coffee', done:false},
-{lid:'4',product:'brown sugar', done:false},
-{lid:'4',product:'bacon', done:false},
-{lid:'1',product:'apples', done:false},
-{lid:'5',product:'2x4-8\'', done:false},
-{lid:'0',product:'brown gravy', done:true},
-{lid:'0',product:'bags', done:true},
-{lid:'0',product:'applesauce', done:true},
-{lid:'00',product:'sugar', done:true},
-{lid:'0',product:'baby back ribs', done:true},
-{lid:'1',product:'brown gravy', done:true},
-{lid:'7',product:'bags', done:true},
+{lid:'1',product:'banana', done:false, tags:[]},
+{lid:'4',product:'coffee', done:false, tags:[]},
+{lid:'4',product:'brown sugar', done:false, tags:[]},
+{lid:'4',product:'bacon', done:false, tags:[]},
+{lid:'1',product:'apples', done:false, tags:[]},
+{lid:'5',product:'2x4-8\'', done:false, tags:[]},
+{lid:'0',product:'brown gravy', done:true, tags:[]},
+{lid:'0',product:'bags', done:true, tags:[]},
+{lid:'0',product:'applesauce', done:true, tags:[]},
+{lid:'00',product:'sugar', done:true, tags:[]},
+{lid:'0',product:'baby back ribs', done:true, tags:[]},
+{lid:'1',product:'brown gravy', done:true, tags:[]},
+{lid:'7',product:'bags', done:true, tags:[]},
 {lid:'7',product:'applesauce', done:true},
-{lid:'4',product:'sugar', done:true},
-{lid:'1',product:'baby back ribs', done:true},
-{lid:'4',product:'apple butter', done:true}
+{lid:'4',product:'sugar', done:true, tags:[]},
+{lid:'1',product:'baby back ribs', done:true, tags:[]},
+{lid:'4',product:'apple butter', done:true, tags:[]}
 ];
 
 var lists =[];
 lists.name = 'lists';
 lists.items = [
-{lid:'1', shops:'groceries'},
-{lid:'2', shops:'hardware'},
-{lid:'3', shops:'drugs'},
-{lid:'4', shops:'groceries'},
-{lid:'5', shops:'building'},
-{lid:'6', shops:'garden'},
-{lid:'7', shops:'groceries'},
-{lid:'0', shops:'testShop'},
-{lid:'00', shops:'testShop'}
+{lid:'1', shops:'groceries', timestamp:1395763172175},
+{lid:'2', shops:'hardware', timestamp:1395763172175},
+{lid:'3', shops:'drugs', timestamp:1395763172175},
+{lid:'4', shops:'groceries', timestamp:1395763172175},
+{lid:'5', shops:'building', timestamp:1395763172175},
+{lid:'6', shops:'garden', timestamp:1395763172175},
+{lid:'7', shops:'groceries', timestamp:1395763172175},
+{lid:'0', shops:'testShop', timestamp:1395763172175},
+{lid:'00', shops:'testShop', timestamp:1395763172175}
 ];
 
 var users = [];

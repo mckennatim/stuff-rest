@@ -1,39 +1,45 @@
 ===using superagent and mocha for testing===
-  basic database tests
-    √ if there are no lists for user it should be undefined
-    √ should be undefined if lid doesnt match any list
+ basic database tests
+   √ if there are no lists for user it should be undefined
+   √ should be undefined if lid doesnt match any list
 
-  superagent:
-    √ GET / should be running and return: please select...
-    users
-      √ DELs users/:name from users->success=1
-      √ GETs {} if users/:tim7 doesnt exist
-      √ GETs all users and counts em
-      √ POSTs a new /user/:tim7 -> full array of objects
-      √ GETs all users expecting the count to go up
-      √ GETs a users/:tim7
-      √ rejects POST of duplicate user/:tim7 ->11000
-      √ PUTs a new :list on /users/:name/:listId->list
-      √ rejects a PUT of new :list on /users->list already included
-      √ reject a PUT of new :list for user -> name taken, choose another
-    products
-      √ GETs all /products
-      √ GETs all /products for /:listId 0
-      √ GETs /products/:name/:shops
-      √ fails to GETs /products/:name Or/:shopNoExists
-      √ POSTs new /product/:lid
-      √ checks that product count ^ and new product is there
-      √ DELs products/:_id->success=1
-      √ GETs /products/done/:lid for list
-      √ GETs no /products/needed/:lid for list
-      √ PUTs update /product/:pid to needed
-      √ GETs 1 /products/needed/:lid for list
-      √ PUTs update /product/:pid to done
+ superagent:
+   √ GET / should be running and return: please select...
+   users
+     √ DELs users/:name from users->success=1
+     √ GETs {} if users/:tim7 doesnt exist
+     √ GETs all users and counts em
+     √ POSTs a new /user/:tim7 -> full array of objects
+     √ GETs all users expecting the count to go up
+     √ GETs a users/:tim7
+     √ rejects POST of duplicate user/:tim7 ->11000
+     √ PUTs a new :list on /users/:name/:listId->list
+     √ rejects a PUT of new :list on /users->list already included
+     √ reject a PUT of new :list for user -> name taken, choose another
+   products
+     √ GETs all /products
+     √ GETs all /products for /:listId 0
+     √ GETs /products/:name/:shops
+     √ fails to GETs /products/:name Or/:shopNoExists
+     √ POSTs new /product/:lid
+     √ checks that product count ^ and new product is there
+     √ DELs products/:_id->success=1
+     √ GETs /products/done/:lid for list
+     √ GETs no /products/needed/:lid for list
+     √ PUTs update /product/:pid to needed
+     √ GETs 1 /products/needed/:lid for list
+     √ PUTs update /product/:pid to done
+     √ PUTs update /product/:pid product(name)
 
 
-  25 passing (242ms)
+ 26 passing (280ms)
 todo
-:edit a product
+
+lists
+:add timestamp update and download list record every time a list is added to or updated
+:POST create a list
+:lookup timestamp for list
+:DEL a list
 :PUTs a relpacement /list/:lid 
 :have the root be /api
 :[http://blog.auth0.com/2014/01/07/angularjs-authentication-with-cookies-vs-token/ angularjs-authentication-with-cookies-vs-token]
@@ -57,42 +63,51 @@ curl -d '{"name":"tim3", "email":"tim@sitebuilt.net", "lists":[]}' -H "Content-T
 
 ===test data===
 <pre>
-  var products =[];
-  products.name = 'products';
-  products.items = [   
-  {lid:'1',product:'banana', done:false},
-  {lid:'4',product:'coffee', done:false},
-  {lid:'4',product:'brown sugar', done:false},
-  {lid:'4',product:'bacon', done:false},
-  {lid:'1',product:'apples', done:false},
-  {lid:'5',product:'2x4-8\'', done:false},
-  {lid:'1',product:'brown gravy', done:true},
-  {lid:'7',product:'bags', done:true},
-  {lid:'7',product:'applesauce', done:true},
-  {lid:'4',product:'sugar', done:true},
-  {lid:'1',product:'baby back ribs', done:true},
-  {lid:'4',product:'apple butter', done:true}
-  ];
+var products =[];
+products.name = 'products';
+products.items = [   
+{lid:'1',product:'banana', done:false, tags:[]},
+{lid:'4',product:'coffee', done:false, tags:[]},
+{lid:'4',product:'brown sugar', done:false, tags:[]},
+{lid:'4',product:'bacon', done:false, tags:[]},
+{lid:'1',product:'apples', done:false, tags:[]},
+{lid:'5',product:'2x4-8\'', done:false, tags:[]},
+{lid:'0',product:'brown gravy', done:true, tags:[]},
+{lid:'0',product:'bags', done:true, tags:[]},
+{lid:'0',product:'applesauce', done:true, tags:[]},
+{lid:'00',product:'sugar', done:true, tags:[]},
+{lid:'0',product:'baby back ribs', done:true, tags:[]},
+{lid:'1',product:'brown gravy', done:true, tags:[]},
+{lid:'7',product:'bags', done:true, tags:[]},
+{lid:'7',product:'applesauce', done:true},
+{lid:'4',product:'sugar', done:true, tags:[]},
+{lid:'1',product:'baby back ribs', done:true, tags:[]},
+{lid:'4',product:'apple butter', done:true, tags:[]}
+];
 
-  var lists =[];
-  lists.name = 'lists';
-  lists.items = [
-  {lid:'1', shops:'groceries'},
-  {lid:'2', shops:'hardware'},
-  {lid:'3', shops:'drugs'},
-  {lid:'4', shops:'groceries'},
-  {lid:'5', shops:'building'},
-  {lid:'6', shops:'garden'},
-  {lid:'7', shops:'groceries'}
-  ];
+var lists =[];
+lists.name = 'lists';
+lists.items = [
+{lid:'1', shops:'groceries'},
+{lid:'2', shops:'hardware'},
+{lid:'3', shops:'drugs'},
+{lid:'4', shops:'groceries'},
+{lid:'5', shops:'building'},
+{lid:'6', shops:'garden'},
+{lid:'7', shops:'groceries'},
+{lid:'0', shops:'testShop'},
+{lid:'00', shops:'testShop'}
+];
 
-  var users = [];
-  users.name = 'users';
-  users.items= [
-  {name: 'tim', email: 'mckenna.tim@gmail.com', lists:[]},
-  {name: 'peri', email: 'perimckenna@gmail.com', lists:[]},
-  {name: 'tim2', email: 'mckt_jp@yahoo.com', lists:[]}
-  ];
+var users = [];
+users.name = 'users';
+users.items= [
+{name: 'tim', email: 'mckenna.tim@gmail.com', lists:[]},
+{name: 'tim7', email: 'mckenna.tim@gmail.com', lists:[]},
+{name: 'peri', email: 'perimckenna@gmail.com', lists:[]},
+{name: 'tim2', email: 'mckt_jp@yahoo.com', lists:[]}
+];
+
 </pre>
 
 ====TDD====

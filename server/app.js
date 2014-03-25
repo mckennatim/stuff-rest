@@ -26,7 +26,6 @@ this.server.get('/api/', function(req, res) {
   res.jsonp('please select a collection, lists, users or items')
 });
 
-this.server.get('/api/lists', stuff.findLists);
 
 this.server.get('/api/users', stuff.findUsers);
 this.server.post('/api/users', stuff.createUser); //POST=Create
@@ -43,3 +42,5 @@ this.server.post('/api/products/:lid', stuff.addProduct4Lid);//POST=Create new p
 this.server.del('/api/products/:pid', stuff.deleteProduct);
 this.server.put('/api/products/:pid', stuff.updateProduct);
 
+this.server.get('/api/lists', stuff.findLists);
+this.server.get('/api/lists/:lid', stuff.getList)
