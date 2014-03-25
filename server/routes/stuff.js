@@ -131,23 +131,13 @@ exports.findProductsNeeded4Lid = function(req, res) {
     });
   });
 };
-exports.updateProduct2needed = function(req,res){
-  console.log('in update products 2 needed');
+exports.updateProduct = function(req,res){
+  console.log('in update product/:pid');
   console.log(req.params);
+  var body=req.body;
   var pid = ObjectId(req.params.pid);
   db.collection('products', function(err, collection) {
-    collection.update({_id:pid},{$set:{done:false}},function(err, items) {
-      console.log(items);
-      res.jsonp(items);
-    });
-  });
-};
-exports.updateProduct2done = function(req,res){
-  console.log('in update products 2 needed');
-  console.log(req.params);
-  var pid = ObjectId(req.params.pid);
-  db.collection('products', function(err, collection) {
-    collection.update({_id:pid},{$set:{done:true}},function(err, items) {
+    collection.update({_id:pid},{$set:body},function(err, items) {
       console.log(items);
       res.jsonp(items);
     });

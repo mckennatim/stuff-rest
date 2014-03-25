@@ -134,12 +134,13 @@ describe('superagent:', function(){
         })
     })         
   })
+/*----------------------------------------------------------------------------------*/
   describe('products', function(){
     var productCnt = 4;
     var pid;
     var product = 'hot dog with craut';
     var wasDonePid;
-    var wasNeededPid;
+    var wasDoneProduct;
 
     it('GETs all /products', function(done){
       superagent.get(httpLoc+'products/')
@@ -213,6 +214,7 @@ describe('superagent:', function(){
         .end(function(e, res){
           //console.log(res.body)
           wasDonePid=res.body[0]._id
+          wasDoneProduct=res.body[0].product
           //console.log(wasDonePid)
           expect(e).to.eql(null)
           expect(res.body).to.be.an('array')
@@ -233,8 +235,8 @@ describe('superagent:', function(){
         })
     })
     it('PUTs update /product/:pid to needed', function(done){
-      superagent.put(httpLoc+'products/needed/'+wasDonePid)
-        .send()
+      superagent.put(httpLoc+'products/'+wasDonePid)
+        .send({done:false})
         .end(function(e, res){
           //console.log(res.body)
           expect(e).to.eql(null)
@@ -253,8 +255,20 @@ describe('superagent:', function(){
         })
     })
     it('PUTs update /product/:pid to done', function(done){
-      superagent.put(httpLoc+'products/done/'+wasDonePid)
-        .send()
+      superagent.put(httpLoc+'products/'+wasDonePid)
+        .send({done:true})
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.eql(1)
+          done()
+        })
+    })            
+    it('PUTs update /product/:pid product(name)', function(done){
+      var productMod =wasDoneProduct+'Z';
+      //console.log({product:productMod})
+      superagent.put(httpLoc+'products/'+wasDonePid)
+        .send({product:productMod})
         .end(function(e, res){
           //console.log(res.body)
           expect(e).to.eql(null)
