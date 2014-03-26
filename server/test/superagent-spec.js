@@ -282,15 +282,46 @@ describe('superagent:', function(){
 /*----------------------------------------------------------------------------------*/
   describe('lists', function(){
     var newListId;
+    var shops = 'testShop2';
 
-    it('GETs timestamp for /lists/:lid', function(done){
-      superagent.get(httpLoc+'lists/'+listId)
+    it('POSTs (creates) a new list',function(done){
+      superagent.post(httpLoc+'lists/'+shops)
+        .send()
         .end(function(e,res){
-          console.log(util.ity.createRandomWord(7))
-          expect(e).to.be(null)
-          expect(res.body.timestamp).to.be.greaterThan(1300000000000)
+          //console.log(res.body)
+          newListId = res.body[0].lid
+          //console.log(lid)
+          expect(res.body[0].shops).to.eql(shops)
           done()
         })
     })
-  })   
+    it('GETs timestamp for /lists/:lid', function(done){
+      superagent.get(httpLoc+'lists/'+newListId)
+        .end(function(e,res){
+          expect(e).to.be(null)
+          expect(res.body.timestamp).to.be.greaterThan(Date.now()-400)
+          done()
+        })
+    })
+
+    it('DELs a list by :lid', function(done){
+      superagent.del(httpLoc+'lists/'+newListId)
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.eql(1)
+          done()
+        })      
+    })
+    it('PUTs updates /list timestamp', function(done){
+      superagent.put(httpLoc+'lists/'+listId)
+        .send({timestamp:Date.now()})
+        .end(function(e, res){
+          //console.log(res.body)
+          expect(e).to.eql(null)
+          expect(res.body).to.eql(1)
+          done()
+        })
+    })
+  })    
 })

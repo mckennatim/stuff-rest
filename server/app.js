@@ -44,3 +44,6 @@ this.server.put('/api/products/:pid', stuff.updateProduct);
 
 this.server.get('/api/lists', stuff.findLists);
 this.server.get('/api/lists/:lid', stuff.getList)
+this.server.post('/api/lists/:shops', stuff.createList)
+this.server.del('/api/lists/:lid', stuff.deleteList)
+this.server.put('/api/lists/:lid', stuff.updateList)

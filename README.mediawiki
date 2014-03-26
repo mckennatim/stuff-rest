@@ -1,6 +1,6 @@
 ===using superagent and mocha for testing===
  basic database tests
-   √ if there are no lists for user it should be undefined
+   √ if there are no lists for user it should be undefined (105ms)
    √ should be undefined if lid doesnt match any list
 
  superagent:
@@ -30,18 +30,18 @@
      √ GETs 1 /products/needed/:lid for list
      √ PUTs update /product/:pid to done
      √ PUTs update /product/:pid product(name)
+   lists
+     √ POSTs (creates) a new list
+     √ GETs timestamp for /lists/:lid
+     √ DELs a list by :lid
+     √ PUTs updates /list timestamp
 
 
- 26 passing (280ms)
+ 30 passing (374ms)
 todo
 
 lists
-:add timestamp update and download list record every time a list is added to or updated
-:POST create a list
-:lookup timestamp for list
-:DEL a list
 :PUTs a relpacement /list/:lid 
-:have the root be /api
 :[http://blog.auth0.com/2014/01/07/angularjs-authentication-with-cookies-vs-token/ angularjs-authentication-with-cookies-vs-token]
 ===using curl to access rest.api===
 curl http://localhost:3020/users

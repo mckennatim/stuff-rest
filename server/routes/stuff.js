@@ -4,6 +4,7 @@ var MongoClient = require('mongodb').MongoClient,
     db;
 //to translate mongo id string to mongo _id
 var ObjectId = require('mongoose').Types.ObjectId;
+var util = require('../../util/util.js')
 /*---------------------------------------------------------------------------*/
 var mongoClient = new MongoClient(new Server('localhost', 27017));
 mongoClient.open(function(err, mongoClient) {
@@ -176,20 +177,22 @@ exports.findProductsNeeded4Lid = function(req, res) {
   var lid = req.params.lid;
   db.collection('products', function(err, collection) {
     collection.find({lid:lid,done:false}).toArray(function(err, items) {
-      //console.log(items);
+      console.log(items);
       res.jsonp(items);
     });
   });
 };
 exports.updateProduct = function(req,res){
-  console.log('in update product/:pid');
+  console.log('in updateProduct/:pid + getLidUpdTimestamp');
   console.log(req.params);
   var body=req.body;
   var pid = ObjectId(req.params.pid);
-  db.collection('products', function(err, collection) {
-    collection.update({_id:pid},{$set:body},function(err, items) {
-      console.log(items);
-      res.jsonp(items);
+  getLidUpdTimestamp(db,pid,function(){
+    db.collection('products', function(err, collection) {
+      collection.update({_id:pid},{$set:body},function(err, items) {
+        console.log(items);
+        res.jsonp(items);
+      });
     });
   });
 };
@@ -217,7 +220,7 @@ exports.findProducts4UserByLname = function(req, res) {
   })
 }
 exports.addProduct4Lid=function(req, res){
-  console.log('in addProduct4Lid');
+  console.log('in addProduct4Lid + upd lid timestamp');
   console.log(req.params);
   var lid = req.params.lid;
   var body= req.body; 
@@ -225,17 +228,20 @@ exports.addProduct4Lid=function(req, res){
   db.collection('products', function(err, collection) {
       collection.insert(body, function(err, saved) {
           if(err){res.jsonp(err)}else{res.jsonp(saved)};
+          updListTimestamp(db,lid);
       });
   });  
 }  
 exports.deleteProduct=function(req,res){
-  console.log('in delete product by _id');
+  console.log('in deleteProduct by _id + getLidUpdTimestamp');
   console.log(req.params);
   var pid = ObjectId(req.params.pid);
-  db.collection('products', function(err, collection) {
-    collection.remove({_id:pid}, function(err, saved) {
-      if(err){res.jsonp(err)}else{res.jsonp(saved)};
-    });
+  getLidUpdTimestamp(db,pid,function(){
+    db.collection('products', function(err, collection) {
+      collection.remove({_id:pid}, function(err, saved) {
+        if(err){res.jsonp(err)}else{res.jsonp(saved)};
+      });
+    });    
   });      
 }
 
@@ -251,8 +257,64 @@ exports.getList=function(req,res){
     })
   })
 }
+exports.createList=function(req,res){
+  console.log('in createList w shops');
+  console.log(req.params.shops);
+  var shops = req.params.shops;
+  var body= {lid:util.ity.createRandomWord(8), shops:shops, timestamp:Date.now()} 
+  console.log(body);
+  db.collection('lists', function(err, collection) {
+      collection.insert(body, function(err, saved) {
+          if(err){res.jsonp(err)}else{res.jsonp(saved)};
+      });
+  });  
+}
+exports.deleteList=function(req,res){
+  console.log('in delete list by lid');
+  console.log(req.params);
+  var lid = req.params.lid;
+  db.collection('lists', function(err, collection) {
+    collection.remove({lid:lid}, function(err, saved) {
+      if(err){res.jsonp(err)}else{res.jsonp(saved)};
+    });
+  });      
+}
+exports.updateList = function(req,res){
+  console.log('in update list/:lid');
+  console.log(req.params);
+  var body=req.body;
+  var lid = req.params.lid;
+  db.collection('lists', function(err, collection) {
+    collection.update({lid:lid},{$set:body},function(err, items) {
+      console.log(items);
+      res.jsonp(items);
+    });
+  });
+};
 
-
+/*------------------------------support functions----------------------------------*/
+var updListTimestamp=function(db,lid){
+  console.log('in updListTimestamp')
+  var timestamp = Date.now()
+  console.log(timestamp) 
+  db.collection('lists', function(err, collection) {
+    collection.update({lid:lid},{$set:{timestamp:timestamp}},function(err, items) {
+      console.log(items);
+    });
+  });
+}
+var getLidUpdTimestamp=function(db,pid, callback){
+  console.log('in getLidUpdTimestamp')
+  //var apid=ObjectId(pid)
+  //console.log(apid)
+  db.collection('products', function(err, collection) {
+    collection.findOne({_id:pid},function(err, items) {
+      console.log(items);
+      updListTimestamp(db,items.lid);
+    });
+  });
+  callback();
+}
 
 /*------------------------------------------------------------------------------------------------*/
 
