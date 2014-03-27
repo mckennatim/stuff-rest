@@ -177,7 +177,7 @@ describe('superagent:', function(){
           done()
         })          
     })
-    it('POSTs new /product/:lid', function(done){
+    it('POSTs new /product/:lid +timestamp', function(done){
       superagent.post(httpLoc+'products/'+listId)
         .send({lid:listId, product:product, done:false, tags:[]})
         .end(function(e,res){
@@ -202,7 +202,7 @@ describe('superagent:', function(){
           done()          
         })
     })
-    it('DELs products/:_id->success=1', function(done){
+    it('DELs products/:_id->success=1 +timestamp', function(done){
       superagent.del(httpLoc+'products/'+pid)
         .end(function(e, res){
           //console.log(res.body)
@@ -236,7 +236,7 @@ describe('superagent:', function(){
           done()
         })
     })
-    it('PUTs update /product/:pid to needed', function(done){
+    it('PUTs update /product/:pid to needed +timestamp', function(done){
       superagent.put(httpLoc+'products/'+wasDonePid)
         .send({done:false})
         .end(function(e, res){
@@ -256,7 +256,7 @@ describe('superagent:', function(){
           done()
         })
     })
-    it('PUTs update /product/:pid to done', function(done){
+    it('PUTs update /product/:pid to done +timestamp', function(done){
       superagent.put(httpLoc+'products/'+wasDonePid)
         .send({done:true})
         .end(function(e, res){
@@ -266,7 +266,7 @@ describe('superagent:', function(){
           done()
         })
     })            
-    it('PUTs update /product/:pid product(name)', function(done){
+    it('PUTs update /product/:pid product(name) +timestamp', function(done){
       var productMod =wasDoneProduct+'Z';
       //console.log({product:productMod})
       superagent.put(httpLoc+'products/'+wasDonePid)
