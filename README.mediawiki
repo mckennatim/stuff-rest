@@ -38,10 +38,12 @@
 
 
  30 passing (374ms)
-todo
+===description===
+This is a rewrite of PHP/MYSQL mobile-first app for shared shopping lists. While I could certainly refactor that existin app into a MVC Agile test driven piece of clean code, I prefer to get some experience the Angular/NodeJS/Express/MongoDb stack. More importantly, I need to somehow shock my system into the paradigm of building an application by the iterative process of decribing a feature, writing a test for it that fails, writing code to implement a passing test, re-factor and loop.So far it is working and I see a future for this approach for all my code.
 
-lists
-:PUTs a relpacement /list/:lid 
+The basic architecture is to create a REST API that contains a good part of the business logic or MODEL of the system. The api communicates in JSON to a front end encapsulating the CONTROLLER and VIEW. 
+
+cd:PUTs a relpacement /list/:lid 
 :[http://blog.auth0.com/2014/01/07/angularjs-authentication-with-cookies-vs-token/ angularjs-authentication-with-cookies-vs-token]
 ===using curl to access rest.api===
 curl http://localhost:3020/users
@@ -110,6 +112,6 @@ users.items= [
 
 </pre>
 
-====TDD====
+===TDD===
 http://wiki.sitebuilt.net/TDD
 
