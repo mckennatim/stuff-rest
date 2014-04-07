@@ -43,7 +43,8 @@ This is a rewrite of PHP/MYSQL mobile-first app for shared shopping lists. While
 
 The basic architecture is to create a REST API that contains a good part of the business logic or MODEL of the system. The api communicates in JSON to a front end encapsulating the CONTROLLER and VIEW. 
 
-cd:PUTs a relpacement /list/:lid 
+===ToDo===
+authentication
 :[http://blog.auth0.com/2014/01/07/angularjs-authentication-with-cookies-vs-token/ angularjs-authentication-with-cookies-vs-token]
 ===using curl to access rest.api===
 curl http://localhost:3020/users
